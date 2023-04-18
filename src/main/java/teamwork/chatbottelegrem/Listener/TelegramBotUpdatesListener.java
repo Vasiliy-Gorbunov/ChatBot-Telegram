@@ -60,6 +60,13 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
                     case "Как взять животное из приюта/cat":
                         infoHowTakeAnimalFromShelterCat(chatId);
                         break;
+                    case "Прислать отчет о питомце /Dog":
+                        sendPetReportDog(chatId);
+                        break;
+                    case "Прислать отчет о питомце /cat":
+                        sendPetReportCat(chatId);
+                        break;
+
                 }
 //                if (chooseShelter == 1 || chooseShelter == 2) {
 //
@@ -160,8 +167,8 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
         findOutInformationAboutShelter.callbackData("Узнать информацию о приюте/dog");
         InlineKeyboardButton howTakeAnimalFromShelter = new InlineKeyboardButton("Как взять животное из приюта");
         howTakeAnimalFromShelter.callbackData("Как взять животное из приюта/dog");
-        InlineKeyboardButton sendPetReport = new InlineKeyboardButton("Прислать отчет о питомце/dog");
-        sendPetReport.callbackData("Прислать отчет о питомце");
+        InlineKeyboardButton sendPetReport = new InlineKeyboardButton("Прислать отчет о питомце");
+        sendPetReport.callbackData("Прислать отчет о питомце /Dog");
         InlineKeyboardButton callVolunteer = new InlineKeyboardButton("Позвать волонтера");
         callVolunteer.callbackData("Позвать волонтера");
         InlineKeyboardButton back = new InlineKeyboardButton("Назад");
@@ -182,8 +189,8 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
         findOutInformationAboutShelter.callbackData("Узнать информацию о приюте/cat");
         InlineKeyboardButton howTakeAnimalFromShelter = new InlineKeyboardButton("Как взять животное из приюта");
         howTakeAnimalFromShelter.callbackData("Как взять животное из приюта/cat");
-        InlineKeyboardButton sendPetReport = new InlineKeyboardButton("Прислать отчет о питомце/cat");
-        sendPetReport.callbackData("Прислать отчет о питомце");
+        InlineKeyboardButton sendPetReport = new InlineKeyboardButton("Прислать отчет о питомце");
+        sendPetReport.callbackData("Прислать отчет о питомце /cat");
         InlineKeyboardButton callVolunteer = new InlineKeyboardButton("Позвать волонтера");
         callVolunteer.callbackData("Позвать волонтера");
         InlineKeyboardButton back = new InlineKeyboardButton("Назад");
@@ -235,7 +242,6 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
         }
 
 
-
     }
 
     private void infoAboutShelterCat(Long chatId) {
@@ -273,7 +279,8 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
         if (!sendResponse1.isOk()) {
             logger.error("Error during sending message: {}", sendResponse1.description());
 
-    }}
+        }
+    }
 
     private void infoHowTakeAnimalFromShelterDog(Long chatId) {
         InlineKeyboardButton getRulesForGettingToKnowAnimalBeforePickingItUpFromShelter =
@@ -315,7 +322,7 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
                 .callbackData("2.8 Dog");
 
 
-        InlineKeyboardButton getRecommendationsOnProvenDogHandlersForFurtherReferenceToThem=
+        InlineKeyboardButton getRecommendationsOnProvenDogHandlersForFurtherReferenceToThem =
                 new InlineKeyboardButton("получить рекомендации по проверенным кинологом для дальнейшего обращения к ним");
         getRecommendationsOnProvenDogHandlersForFurtherReferenceToThem
                 .callbackData("2.9 Dog");
@@ -331,7 +338,7 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
                 .callbackData("2.11 Dog");
 
         InlineKeyboardButton anotherQuestionOrCallVolunteer =
-        new InlineKeyboardButton("Другие вопросы / позвать волонтера");
+                new InlineKeyboardButton("Другие вопросы / позвать волонтера");
         anotherQuestionOrCallVolunteer
                 .callbackData("Другие вопросы / позвать волонтера/dog");
         InlineKeyboardButton back =
@@ -355,7 +362,8 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
 
 
         }
-        }
+    }
+
     private void infoHowTakeAnimalFromShelterCat(Long chatId) {
         InlineKeyboardButton getRulesForGettingToKnowAnimalBeforePickingItUpFromShelter =
                 new InlineKeyboardButton("Получить правила знакомства с животным до того, как забрать его из приюта");
@@ -423,6 +431,64 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
             logger.error("Error during sending message: {}", sendResponse1.description());
 
 
+        }
+    }
+
+    private void sendPetReportDog(Long chatId) {
+        InlineKeyboardButton sentReportDog =
+                new InlineKeyboardButton("Отправить отчет о питомце");
+        sentReportDog
+                .callbackData("3.1 Dog");
+        InlineKeyboardButton getDailyReportForm =
+                new InlineKeyboardButton("Получить форму ежедневного отчета");
+        getDailyReportForm
+                .callbackData("3.2 Dog");
+        InlineKeyboardButton anotherQuestionOrCallVolunteer =
+                new InlineKeyboardButton("Другие вопросы / позвать волонтера");
+        anotherQuestionOrCallVolunteer
+                .callbackData("Другие вопросы / позвать волонтера/Dog");
+        InlineKeyboardButton back =
+                new InlineKeyboardButton("Назад");
+        back
+                .callbackData("mainMenuCat");
+        Keyboard keyboard = new InlineKeyboardMarkup(sentReportDog, getDailyReportForm, anotherQuestionOrCallVolunteer, back);
+        SendMessage sendMessage = new SendMessage(chatId, "Выберите интересующий Вас пункт меню");
+        sendMessage.replyMarkup(keyboard);
+
+        SendResponse sendResponse1 = telegramBot.execute(sendMessage);
+        if (!sendResponse1.isOk()) {
+            logger.error("Error during sending message: {}", sendResponse1.description());
+
+
+        }
+
+
+    }
+
+    private void sendPetReportCat(Long chatId) {
+        InlineKeyboardButton sentReportDog =
+                new InlineKeyboardButton("Отправить отчет о питомце");
+        sentReportDog
+                .callbackData("3.1 Cat");
+        InlineKeyboardButton getDailyReportForm =
+                new InlineKeyboardButton("Получить форму ежедневного отчета");
+        getDailyReportForm
+                .callbackData("3.2 Cat");
+        InlineKeyboardButton anotherQuestionOrCallVolunteer =
+                new InlineKeyboardButton("Другие вопросы / позвать волонтера");
+        anotherQuestionOrCallVolunteer
+                .callbackData("Другие вопросы / позвать волонтера/Cat");
+        InlineKeyboardButton back =
+                new InlineKeyboardButton("Назад");
+        back
+                .callbackData("mainMenuCat");
+        Keyboard keyboard = new InlineKeyboardMarkup(sentReportDog, getDailyReportForm, anotherQuestionOrCallVolunteer, back);
+        SendMessage sendMessage = new SendMessage(chatId, "Выберите интересующий Вас пункт меню");
+        sendMessage.replyMarkup(keyboard);
+
+        SendResponse sendResponse1 = telegramBot.execute(sendMessage);
+        if (!sendResponse1.isOk()) {
+            logger.error("Error during sending message: {}", sendResponse1.description());
         }
     }
 }
