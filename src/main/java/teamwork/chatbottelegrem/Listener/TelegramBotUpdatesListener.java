@@ -45,7 +45,7 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
                     case "Приют для кошек":
                         mainMenuCat(chatId);
                         break;
-                    case "Приют для собак":
+                    case "Приют для собак", "mainMenuDog":
                         mainMenuDog(chatId);
                         break;
                     case "Узнать информацию о приюте/dog":
@@ -53,10 +53,13 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
                         break;
                     case "Узнать информацию о приюте/cat":
                         infoAboutShelterCat(chatId);
+                        break;
                     case "Как взять животное из приюта/dog":
                         infoHowTakeAnimalFromShelterDog(chatId);
+                        break;
                     case "Как взять животное из приюта/cat":
                         infoHowTakeAnimalFromShelterCat(chatId);
+                        break;
                 }
 //                if (chooseShelter == 1 || chooseShelter == 2) {
 //
@@ -199,23 +202,23 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
         InlineKeyboardButton getAddressScheduleAndDrivingDirections =
                 new InlineKeyboardButton("Узнать расписание работы приюта, адрес и схему проезда");
         getAddressScheduleAndDrivingDirections
-                .callbackData("Узнать расписание работы приюта, адрес и схему проезда/dog");
+                .callbackData("1.1 Dog");
         InlineKeyboardButton getSecurityContactDetailsForRegistrationOfCarPass =
                 new InlineKeyboardButton("Узнать контактные данные охраны для оформления пропуска на машину");
         getSecurityContactDetailsForRegistrationOfCarPass
-                .callbackData("Узнать контактные данные охраны для оформления пропуска на машину/dog");
+                .callbackData("1.2 Dog");
         InlineKeyboardButton getGeneralSafetyRecommendationsOnTerritoryFOfShelter =
                 new InlineKeyboardButton("Узнать общие рекомендации о технике безопасности на территории приюта");
         getGeneralSafetyRecommendationsOnTerritoryFOfShelter
-                .callbackData("Узнать общие рекомендации о технике безопасности на территории приюта/dog");
+                .callbackData("1.3 Dog");
         InlineKeyboardButton sendContactDetailsForCommunication =
                 new InlineKeyboardButton("отправить контактные данные для связи");
         sendContactDetailsForCommunication
-                .callbackData("отправить контактные данные для связи/dog");
+                .callbackData("1.4 Dog");
         InlineKeyboardButton anotherQuestionOrCallVolunteer =
                 new InlineKeyboardButton("Другие вопросы / позвать волонтера");
         anotherQuestionOrCallVolunteer
-                .callbackData("Другие вопросы / позвать волонтера/dog");
+                .callbackData("1.5 Dog");
         InlineKeyboardButton back =
                 new InlineKeyboardButton("Назад");
         back
@@ -239,23 +242,23 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
         InlineKeyboardButton getAddressScheduleAndDrivingDirections =
                 new InlineKeyboardButton("Узнать расписание работы приюта, адрес и схему проезда");
         getAddressScheduleAndDrivingDirections
-                .callbackData("Узнать расписание работы приюта, адрес и схему проезда/cat");
+                .callbackData("1.1 Сat");
         InlineKeyboardButton getSecurityContactDetailsForRegistrationOfCarPass =
                 new InlineKeyboardButton("Узнать контактные данные охраны для оформления пропуска на машину");
         getSecurityContactDetailsForRegistrationOfCarPass
-                .callbackData("Узнать контактные данные охраны для оформления пропуска на машину/cat");
+                .callbackData("1.2 Cat");
         InlineKeyboardButton getGeneralSafetyRecommendationsOnTerritoryFOfShelter =
                 new InlineKeyboardButton("Узнать общие рекомендации о технике безопасности на территории приюта");
         getGeneralSafetyRecommendationsOnTerritoryFOfShelter
-                .callbackData("Узнать общие рекомендации о технике безопасности на территории приюта/cat");
+                .callbackData("1.3 Cat");
         InlineKeyboardButton sendContactDetailsForCommunication =
                 new InlineKeyboardButton("отправить контактные данные для связи");
         sendContactDetailsForCommunication
-                .callbackData("отправить контактные данные для связи/cat");
+                .callbackData("1.4 Cat");
         InlineKeyboardButton anotherQuestionOrCallVolunteer =
                 new InlineKeyboardButton("Другие вопросы / позвать волонтера");
         anotherQuestionOrCallVolunteer
-                .callbackData("Другие вопросы / позвать волонтера/cat");
+                .callbackData("1.5 Cat");
         InlineKeyboardButton back =
                 new InlineKeyboardButton("Назад");
         back
@@ -276,57 +279,56 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
         InlineKeyboardButton getRulesForGettingToKnowAnimalBeforePickingItUpFromShelter =
                 new InlineKeyboardButton("Получить правила знакомства с животным до того, как забрать его из приюта");
         getRulesForGettingToKnowAnimalBeforePickingItUpFromShelter
-                .callbackData("Получить правила знакомства с животным до того, как забрать его из приюта/dog");
+                .callbackData("2.1 Dog");
 
         InlineKeyboardButton getListOfDocumentsRequiredToTakeAnimalFromShelter =
                 new InlineKeyboardButton(
                         "Получить список документов, необходимых для того, чтобы взять животное из приюта");
         getListOfDocumentsRequiredToTakeAnimalFromShelter
-                .callbackData("Получить список документов, необходимых для того, чтобы взять животное из приюта/dog");
+                .callbackData("2.3 Dog");
 
         InlineKeyboardButton getListOfRecommendationsForTransportingAnimal =
                 new InlineKeyboardButton("Получить список рекомендаций по транспортировке животного");
         getListOfRecommendationsForTransportingAnimal
-                .callbackData("список рекомендаций по транспортировке животного/dog");
+                .callbackData("2.4 Dog");
 
         InlineKeyboardButton getListOfRecommendationsForHomeImprovementForPuppy =
                 new InlineKeyboardButton("Получить список рекомендаций по обустройству дома для щенка");
         getListOfRecommendationsForHomeImprovementForPuppy
-                .callbackData("Получить список рекомендаций по обустройству дома для щенка/dog");
+                .callbackData("2.5 Dog");
 
         InlineKeyboardButton getListOfRecommendationsForHomeImprovementForAdultAnimal =
                 new InlineKeyboardButton("Получить список рекомендаций по обустройству дома для взрослого животного");
         getListOfRecommendationsForHomeImprovementForAdultAnimal
-                .callbackData("Получить список рекомендаций по обустройству дома для взрослого животного/dog");
+                .callbackData("2.6 Dog");
 
         InlineKeyboardButton getListOfRecommendationsForHomeImprovementForAnimalWithDisabilities =
                 new InlineKeyboardButton
                         ("Получить список рекомендаций по обустройству дома для животного " +
                                 "с ограниченными возможностями (зрение, передвижение)");
         getListOfRecommendationsForHomeImprovementForAnimalWithDisabilities
-                .callbackData("Получить список рекомендаций по обустройству дома для животного " +
-                        "с ограниченными возможностями (зрение, передвижение)/dog");
+                .callbackData("2.7 Dog");
 
         InlineKeyboardButton getTipsFromDogHandlerPrimaryCommunicationWithDog =
                 new InlineKeyboardButton("Получить советы кинолога по первичному общению с собакой");
         getTipsFromDogHandlerPrimaryCommunicationWithDog
-                .callbackData("Получить советы кинолога по первичному общению с собакой/cat");
+                .callbackData("2.8 Dog");
 
 
         InlineKeyboardButton getRecommendationsOnProvenDogHandlersForFurtherReferenceToThem=
                 new InlineKeyboardButton("получить рекомендации по проверенным кинологом для дальнейшего обращения к ним");
         getRecommendationsOnProvenDogHandlersForFurtherReferenceToThem
-                .callbackData("получить рекомендации по проверенным кинологом для дальнейшего обращения к ним/dog");
+                .callbackData("2.9 Dog");
 
         InlineKeyboardButton getListOfReasonsWhyTheyMayRefuseAndNotLetYouTakeTheDogFromTheShelter =
                 new InlineKeyboardButton("получить список причин, почему могут отказать и не дать забрать собаку из приюта. ");
         getListOfReasonsWhyTheyMayRefuseAndNotLetYouTakeTheDogFromTheShelter
-                .callbackData("Получить список причин, почему могут отказать и не дать забрать собаку из приюта. /dog");
+                .callbackData("2.10 Dog");
 
         InlineKeyboardButton sendContactDetailsForCommunication =
                 new InlineKeyboardButton("отправить контактные данные для связи");
         sendContactDetailsForCommunication
-                .callbackData("отправить контактные данные для связи/dog");
+                .callbackData("2.11 Dog");
 
         InlineKeyboardButton anotherQuestionOrCallVolunteer =
         new InlineKeyboardButton("Другие вопросы / позвать волонтера");
@@ -358,46 +360,45 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
         InlineKeyboardButton getRulesForGettingToKnowAnimalBeforePickingItUpFromShelter =
                 new InlineKeyboardButton("Получить правила знакомства с животным до того, как забрать его из приюта");
         getRulesForGettingToKnowAnimalBeforePickingItUpFromShelter
-                .callbackData("Получить правила знакомства с животным до того, как забрать его из приюта/cat");
+                .callbackData("2.1 Cat");
 
         InlineKeyboardButton getListOfDocumentsRequiredToTakeAnimalFromShelter =
                 new InlineKeyboardButton(
                         "Получить список документов, необходимых для того, чтобы взять животное из приюта");
         getListOfDocumentsRequiredToTakeAnimalFromShelter
-                .callbackData("Получить список документов, необходимых для того, чтобы взять животное из приюта/cat");
+                .callbackData("2.2 Cat");
 
         InlineKeyboardButton getListOfRecommendationsForTransportingAnimal =
                 new InlineKeyboardButton("Получить список рекомендаций по транспортировке животного");
         getListOfRecommendationsForTransportingAnimal
-                .callbackData("список рекомендаций по транспортировке животного/cat");
+                .callbackData("2.3 Cat");
 
         InlineKeyboardButton getListOfRecommendationsForHomeImprovementForKitten =
                 new InlineKeyboardButton("Получить список рекомендаций по обустройству дома для котенка");
         getListOfRecommendationsForHomeImprovementForKitten
-                .callbackData("Получить список рекомендаций по обустройству дома для котенка/cat");
+                .callbackData("2.4 Cat");
 
         InlineKeyboardButton getListOfRecommendationsForHomeImprovementForAdultAnimal =
                 new InlineKeyboardButton("Получить список рекомендаций по обустройству дома для взрослого животного");
         getListOfRecommendationsForHomeImprovementForAdultAnimal
-                .callbackData("Получить список рекомендаций по обустройству дома для взрослого животного/cat");
+                .callbackData("2.5 Cat");
 
         InlineKeyboardButton getListOfRecommendationsForHomeImprovementForAnimalWithDisabilities =
                 new InlineKeyboardButton
                         ("Получить список рекомендаций по обустройству дома для животного " +
                                 "с ограниченными возможностями (зрение, передвижение)");
         getListOfRecommendationsForHomeImprovementForAnimalWithDisabilities
-                .callbackData("Получить список рекомендаций по обустройству дома для животного " +
-                        "с ограниченными возможностями (зрение, передвижение)/cat");
+                .callbackData("2.6 Cat");
 
         InlineKeyboardButton getListOfReasonsWhyTheyMayRefuseAndNotLetYouTakeTheDogFromTheShelter =
                 new InlineKeyboardButton("получить список причин, почему могут отказать и не дать забрать собаку из приюта. ");
         getListOfReasonsWhyTheyMayRefuseAndNotLetYouTakeTheDogFromTheShelter
-                .callbackData("Получить список причин, почему могут отказать и не дать забрать кошку из приюта. /cat");
+                .callbackData("2.7 Cat");
 
         InlineKeyboardButton sendContactDetailsForCommunication =
                 new InlineKeyboardButton("отправить контактные данные для связи");
         sendContactDetailsForCommunication
-                .callbackData("отправить контактные данные для связи/cat");
+                .callbackData("2.8 Cat");
 
         InlineKeyboardButton anotherQuestionOrCallVolunteer =
                 new InlineKeyboardButton("Другие вопросы / позвать волонтера");
