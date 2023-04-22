@@ -146,7 +146,7 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
         if ("/start".equals(messageText)) {
 
             SendMessage sendMessage = new SendMessage(chatId, "Здравствуйте," + update.message().chat().firstName() + "! " +
-                    "я телеграм-бот приюта для животных, я помогу Вам ответить на Ваши вопросы. Выберите, пожалуйста, по какому приюту Ваш вопрос.");
+                    "Я телеграм-бот приюта для животных, я помогу Вам ответить на Ваши вопросы. Выберите, пожалуйста, по какому приюту Ваш вопрос.");
 
             InlineKeyboardButton shelterForCat = new InlineKeyboardButton("Приют для кошек");
             shelterForCat.callbackData("Приют для кошек");
