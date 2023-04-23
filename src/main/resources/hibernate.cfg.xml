@@ -16,7 +16,6 @@
         <property name="show_sql">true</property> <!-- Show SQL in console -->
         <property name="format_sql">true</property> <!-- Show SQL formatted -->
 
-        <mapping class="teamwork.chatbottelegrem.Model.Users"/>
     </session-factory>
 
 </hibernate-configuration>

@@ -9,8 +9,8 @@ import java.util.Objects;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "users")
-public class Users {
+@Table(name = "dogUsers")
+public class DogUsers {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,8 +35,8 @@ public class Users {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        teamwork.chatbottelegrem.Model.Users users = (teamwork.chatbottelegrem.Model.Users) o;
-        return id == users.id && number == users.number && Objects.equals(firstName, users.firstName) && Objects.equals(secondName, users.secondName);
+        teamwork.chatbottelegrem.Model.DogUsers dogUsers = (teamwork.chatbottelegrem.Model.DogUsers) o;
+        return id == dogUsers.id && number == dogUsers.number && Objects.equals(firstName, dogUsers.firstName) && Objects.equals(secondName, dogUsers.secondName);
     }
 
     @Override
@@ -44,4 +44,16 @@ public class Users {
         return Objects.hash(id, firstName, secondName, number);
     }
 
+    public void setChatId(long chatId) {
+    }
+
+    public boolean isEmpty() {
+        return false;
+    }
+
+    public void setPhone(String phoneNumber) {
+    }
+
+    public void setName(String firstName) {
+    }
 }
