@@ -5,7 +5,9 @@ import teamwork.chatbottelegrem.Model.Context;
 import teamwork.chatbottelegrem.repository.ContextRepository;
 
 import java.util.Optional;
-
+/**
+ * сервис класса контекста
+ */
 @Service
 public class ContextService {
     private final ContextRepository contextRepository;

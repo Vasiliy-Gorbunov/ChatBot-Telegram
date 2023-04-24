@@ -1,4 +1,4 @@
 databaseChangeLog:
-  -include:
-    file: liquibase/init.sql
+  - include:
+    file: liquibase/table.sql
 

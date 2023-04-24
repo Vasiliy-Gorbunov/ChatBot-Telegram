@@ -23,7 +23,9 @@ import teamwork.chatbottelegrem.service.DogUsersService;
 
 import javax.annotation.PostConstruct;
 import java.util.List;
-
+/**
+ * Класс для взаимодействия с телеграмм ботом
+ */
 @Component
 public class TelegramBotUpdatesListener implements UpdatesListener {
     @Value("${volunteer-chat-id}")
@@ -45,6 +47,9 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
         this.dogUsersService = dogUsersService;
 
     }
+    /**
+     * Метод реализующий, комманды для виртуальной клавиатуры бота
+     */
     public static ButtonCommand parse(String buttonCommand) {
         ButtonCommand[] values = ButtonCommand.values();
         for (ButtonCommand command : values) {
@@ -59,7 +64,9 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
     public void init() {
         telegramBot.setUpdatesListener(this);
     }
-
+    /**
+     * Метод реализующий логику телеграмм бота
+     */
     @Override
     public int process(List<Update> updates) {
         try {
@@ -75,8 +82,8 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
                 switch (parse(text)) {
                     case START -> {
                         if(contextService.getByChatId(chatId).isEmpty()){
-                            sendResponseMessage(chatId, "Привет! Я могу показать информацию о приютах," +
-                                    "как взять животное из приюта и принять отчет о питомце");
+                            sendResponseMessage(chatId, "Здравствуйте,"+ message.chat().firstName()+ "! " +
+                                    "Я телеграм-бот приюта для животных, я помогу Вам ответить на Ваши вопросы. Выберите, пожалуйста, по какому приюту Ваш вопрос.");
                             Context context = new Context();
                             context.setChatId(chatId);
                             contextService.saveContext(context);
@@ -93,7 +100,7 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
                         }
                         context.setShelterType(ButtonCommand.CAT.getCommand());
                         contextService.saveContext(context);
-                        sendResponseMessage(chatId, "Вы выбрали кошачий приют.");
+                        sendResponseMessage(chatId, "Приют для кошек");
                         keyBoard.shelterMainMenu(chatId);
                     }
                     case DOG -> {
@@ -106,7 +113,7 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
                         }
                         context.setShelterType(ButtonCommand.DOG.getCommand());
                         contextService.saveContext(context);
-                        sendResponseMessage(chatId, "Вы выбрали собачий приют.");
+                        sendResponseMessage(chatId, "Приют для собак");
                         keyBoard.shelterMainMenu(chatId);
                     }
                     case MAIN_MENU -> {
@@ -146,7 +153,7 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
                         }
                     }
                     case VOLUNTEER -> {
-                        sendResponseMessage(chatId, "Мы передали ваше сообщение волонтеру.");
+                        sendResponseMessage(chatId, "Сообщение передано волонтёру");
                         sendForwardMessage(chatId, messageId);
                     }
                     case HOW_ADOPT_PET_INFO -> {
@@ -174,10 +181,10 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
                         Context context = contextService.getByChatId(chatId).get();
                         if(context.getShelterType().equals(ButtonCommand.CAT.getCommand())) {
                             sendResponseMessage(chatId,
-                                    "Для взятия кота из приюта необходимы такие документы: ...");
+                                    "Необходимые документы, для приобретения кота: ...");
                         } else if(context.getShelterType().equals(ButtonCommand.DOG.getCommand())) {
                             sendResponseMessage(chatId,
-                                    "Для взятия собаки из приюта необходимы такие документы: ...");
+                                    "Необходимые документы, для приобретения собаки: ...");
                         }
                     }
                     case null -> {
@@ -196,10 +203,10 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
                             dogUsersService.save(dogUsers);
                         }
                         sendForwardMessage(chatId, messageId);
-                        sendResponseMessage(chatId, "Мы получили ваши контактные данные");
+                        sendResponseMessage(chatId, "Контактные данные приняты");
 
                     }
-                    default -> sendResponseMessage(chatId, "Неизвестная команда!");
+                    default -> sendResponseMessage(chatId, "Команда не распознанна");
                 }
             });
         } catch (Exception e) {
@@ -207,6 +214,10 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
         }
         return UpdatesListener.CONFIRMED_UPDATES_ALL;
     }
+    /**
+     * Метод отправки текстовых сообщений волонтёру.
+     *
+     */
     public void sendForwardMessage(long chatId, int messageId) {
         ForwardMessage forwardMessage = new ForwardMessage(volunteerChatId, chatId, messageId);
         SendResponse sendResponse = telegramBot.execute(forwardMessage);

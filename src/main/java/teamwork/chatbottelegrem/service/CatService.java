@@ -4,7 +4,9 @@ import org.springframework.stereotype.Service;
 import teamwork.chatbottelegrem.Model.Cat;
 import teamwork.chatbottelegrem.exception.CatNotFoundException;
 import teamwork.chatbottelegrem.repository.CatRepository;
-
+/**
+ * Сервис класса кота
+ */
 @Service
 public class CatService {
     private final CatRepository repository;
@@ -13,21 +15,21 @@ public class CatService {
         this.repository = repository;
     }
 
-    /*
-     Добавление нового кота в список
+    /**
+     * Добавление нового кота в список
       */
     public Cat addCat(Cat cat) {
         return this.repository.save(cat);
     }
 
-    /*
-    получение кота по ID
+    /**
+    * получение кота из списка
     */
     public Cat getById(Long id) {
         return this.repository.findById(id).orElseThrow(CatNotFoundException::new);
     }
-    /*
-     * Обновление кота по ID
+    /**
+     * Обновление кота в списке
      */
 
     public Cat update(Cat cat) {
@@ -36,8 +38,8 @@ public class CatService {
         }
         throw new CatNotFoundException();
     }
-    /*
-     * Удаление кота из списка по ID
+    /**
+     * Удаление кота из списка
      */
 
     public void removeById(Long id) {

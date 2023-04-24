@@ -9,7 +9,9 @@ import teamwork.chatbottelegrem.service.CatUsersService;
 import teamwork.chatbottelegrem.service.DogUsersService;
 
 import java.util.Collection;
-
+/**
+ * Контроллер класа владельца кота
+ */
 @RestController
 @RequestMapping("catUsers")
 public class CatUsersController {
@@ -45,6 +47,6 @@ public class CatUsersController {
         }
         return this.service.getAll();
     }
-    //Дописать комменты к методам
+
 }
 

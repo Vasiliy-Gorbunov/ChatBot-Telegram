@@ -5,7 +5,9 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.util.Objects;
 
-
+/**
+ * Класс владельца собаки
+ */
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
@@ -15,18 +17,17 @@ public class DogUsers {
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    @Column(name = "first_name")
-    private String firstName;
-    @Column(name = "second_name")
-    private String secondName;
+    @Column(name = "name")
+    private String name;
+    @Column(name = "yearOfBirth")
+    private String yearOfBirth;
     @Column(name = "number")
     private int number;
     @Override
     public String toString() {
         return "model.Employee{" +
                 "id=" + id +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + secondName + '\'' +
+                ", firstName='" + name + '\'' +
                 ", number='" + number + '\'' +
                 '}';
     }
@@ -36,12 +37,12 @@ public class DogUsers {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         teamwork.chatbottelegrem.Model.DogUsers dogUsers = (teamwork.chatbottelegrem.Model.DogUsers) o;
-        return id == dogUsers.id && number == dogUsers.number && Objects.equals(firstName, dogUsers.firstName) && Objects.equals(secondName, dogUsers.secondName);
+        return id == dogUsers.id && number == dogUsers.number && Objects.equals(name, dogUsers.name) && Objects.equals(yearOfBirth, dogUsers.yearOfBirth);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, firstName, secondName, number);
+        return Objects.hash(id, name, yearOfBirth, number);
     }
 
     public void setChatId(long chatId) {

@@ -4,7 +4,9 @@ import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.web.bind.annotation.*;
 import teamwork.chatbottelegrem.Model.Cat;
 import teamwork.chatbottelegrem.service.CatService;
-
+/**
+ * Контролеер класса кота
+ */
 @RestController
 @RequestMapping("cat")
 public class CatController {

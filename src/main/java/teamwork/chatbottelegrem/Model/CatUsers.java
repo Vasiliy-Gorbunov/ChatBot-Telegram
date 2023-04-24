@@ -6,28 +6,23 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.Objects;
-
+/**
+ * Класс владельца кота
+ */
 @Data
 @Entity
 @Table(name = "catUsers")
 public class CatUsers {
     @Id
-    @GeneratedValue
-    //id пользователя
+    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    //name пользователя
+    @Column(name = "name")
     private String name;
-    //yearOfBirth год рождения пользователя
+    @Column(name="yearOfBirth")
     private int yearOfBirth;
-    //phone телефон пользователя
-    private String phone;
-    //mail електроная почта пользователя
-    private String mail;
-    //adвress пользователя
-    private String address;
-    //chatId номер чата пользователя с ботом
-    private Long chatId;
-    //status пользователя
+    @Column(name = "number")
+    private String number;
     @JsonBackReference
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cat_id")
@@ -38,17 +33,15 @@ public class CatUsers {
     //конструктор класса с полями name, phone, chatId.
     public CatUsers(String name, String phone, Long chatId) {
         this.name = name;
-        this.phone = phone;
-        this.chatId = chatId;
+        this.number = phone;
     }
-    //Конструктор класса со всеми полями.
-    public CatUsers(Long id, String name, int yearOfBirth, String phone, String mail, String address, Long chatId) {
-        this.id = id;
-        this.name = name;
-        this.yearOfBirth = yearOfBirth;
-        this.phone = phone;
-        this.mail = mail;
-        this.address = address;
-        this.chatId = chatId;
+
+    public void setChatId(long chatId) {
+    }
+
+    public void setPhone(String phoneNumber) {
+    }
+
+    public void setName(String firstName) {
     }
 }

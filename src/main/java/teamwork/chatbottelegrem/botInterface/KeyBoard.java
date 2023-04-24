@@ -8,7 +8,9 @@ import com.pengrad.telegrambot.response.SendResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
-
+/**
+ * Класс клавиатуры телграмм бота
+ */
 @Component
 public class KeyBoard {
     private final Logger logger = LoggerFactory.getLogger(KeyBoard.class);
@@ -19,7 +21,7 @@ public class KeyBoard {
     }
 
     /**
-     * Метод, отображающий меню, где выбирается приют.
+     * Метод, отображающий меню выбора
      *
      */
     public void chooseMenu(long chatId) {
@@ -29,7 +31,7 @@ public class KeyBoard {
     }
 
     /**
-     * Метод, отображающий главное меню приюта.
+     * Метод, отображающий главное меню приюта
      *
      */
     public void shelterMainMenu(long chatId) {
@@ -40,7 +42,7 @@ public class KeyBoard {
     }
 
     /**
-     * Метод, отображающий меню с информацией о приюте.
+     * Метод, отображающий меню с основной информацией
      *
      */
     public void shelterInfoMenu(long chatId) {
@@ -54,7 +56,7 @@ public class KeyBoard {
     }
 
     /**
-     * Метод, отображающий меню, с информацией о том, как взять питомца из приюта.
+     * Метод, отображающий меню, с информацией о том, как взять питомца из приюта
      *
      */
     public void shelterInfoHowAdoptPetMenu(long chatId) {
@@ -67,7 +69,7 @@ public class KeyBoard {
     }
 
     /**
-     * Метод, принимающий клавиатуру и текст, и отправляющий ответ
+     * Метод, принимающий сообщение, и отвечающий на него
      *
      */
     public void sendResponseMenu(long chatId, ReplyKeyboardMarkup replyKeyboardMarkup, String text) {

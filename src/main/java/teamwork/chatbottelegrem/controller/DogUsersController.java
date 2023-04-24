@@ -5,7 +5,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import teamwork.chatbottelegrem.Model.DogUsers;
 import teamwork.chatbottelegrem.service.DogUsersService;
-
+/**
+ * Контроллер класса владельца собаки
+ */
 @RestController
 @RequestMapping("/dogUsers")
 public class DogUsersController {
