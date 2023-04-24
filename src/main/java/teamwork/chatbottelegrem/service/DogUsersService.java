@@ -8,9 +8,11 @@ import teamwork.chatbottelegrem.repository.DogUsersRepository;
 public class DogUsersService {
     private final DogUsersRepository dogUsersRepository;
 
+
     public DogUsersService(DogUsersRepository dogUsersRepository) {
         this.dogUsersRepository = dogUsersRepository;
     }
+
 
     public DogUsers save(DogUsers dogUsers) {
         dogUsersRepository.save(dogUsers);
