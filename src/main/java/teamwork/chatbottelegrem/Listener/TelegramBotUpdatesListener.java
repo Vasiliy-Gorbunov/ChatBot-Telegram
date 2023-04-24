@@ -24,6 +24,7 @@ import teamwork.chatbottelegrem.service.DogUsersService;
 import javax.annotation.PostConstruct;
 import java.util.List;
 
+
 @Component
 public class TelegramBotUpdatesListener implements UpdatesListener {
     @Value("${volunteer-chat-id}")
