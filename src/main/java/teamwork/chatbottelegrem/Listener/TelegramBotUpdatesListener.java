@@ -3,6 +3,7 @@ package teamwork.chatbottelegrem.Listener;
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.UpdatesListener;
 import com.pengrad.telegrambot.model.Contact;
+import com.pengrad.telegrambot.model.Document;
 import com.pengrad.telegrambot.model.Message;
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.ForwardMessage;
@@ -22,6 +23,7 @@ import teamwork.chatbottelegrem.service.ContextService;
 import teamwork.chatbottelegrem.service.DogUsersService;
 
 import javax.annotation.PostConstruct;
+import java.io.File;
 import java.util.List;
 
 
@@ -184,7 +186,12 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
                     }
                     case null -> {
                         Context context = contextService.getByChatId(chatId).get();
-                        if (context.getShelterType().equals(
+                        if (message.document() != null) {
+                            Document document = message.document();
+                            File file = new File(document.fileId());
+
+
+                        } else if (context.getShelterType().equals(
                                 ButtonCommand.CAT.getCommand()) && update.message() != null && contact != null) {
                             catUsersService.update(contact.firstName(), contact.phoneNumber(), chatId);
                         } else if (context.getShelterType().equals(
