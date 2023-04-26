@@ -17,20 +17,21 @@ public class CatUsersService {
     public CatUsersService(CatUsersRepository repository) {
         this.repository = repository;
     }
-    public CatUsers getById(Long id) {
-        logger.info("Was invoked method to get a CatOwners by id={}", id);
-        return this.repository.findById(id)
-                .orElseThrow(CatUserNotFoundException::new);
-    }
+//    public CatUsers getById(Long id) {
+//        logger.info("Was invoked method to get a CatOwners by id={}", id);
+//        return this.repository.findById(id)
+//                .orElseThrow(CatUserNotFoundException::new);
+//    }
     public CatUsers create(CatUsers catUsers) {
         logger.info("Was invoked method to create a catOwners");
         return this.repository.save(catUsers);
     }
-    public CatUsers update(CatUsers catUsers) {
-        if (catUsers.getId() != null && getById(catUsers.getId()) != null) {
-            return repository.save(catUsers);
-        }
-        throw new CatUserNotFoundException();
+    public CatUsers update(String name, String phone, Long chatId) {
+            CatUsers catUser = new CatUsers(name, phone, chatId);
+            return repository.save(catUser);
+    }
+    public CatUsers update(CatUsers catUser) {
+        return repository.save(catUser);
     }
     public void removeById(Long id) {
         logger.info("Was invoked method to remove a catOwners by id={}", id);

@@ -5,5 +5,5 @@ import org.springframework.stereotype.Repository;
 import teamwork.chatbottelegrem.Model.DogUsers;
 @Repository
 public interface DogUsersRepository extends JpaRepository<DogUsers, Long> {
-    public DogUsers getDogOwnerByChatId(Long chatId);
+    public DogUsers getDogUsersById(long id);
 }

@@ -1,4 +1,5 @@
 package teamwork.chatbottelegrem.Model;
+
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,41 +10,42 @@ import java.util.Objects;
 
 @Data
 @Entity
-@Table(name = "catUsers")
+@Table(name = "cat_users")
 public class CatUsers {
+    //chatId номер чата пользователя с ботом
     @Id
-    @GeneratedValue
-    //id пользователя
-    private Long id;
+    @Column(name = "chat_id")
+    private Long chatId;
     //name пользователя
     private String name;
     //yearOfBirth год рождения пользователя
+    @Column(name = "year_of_birth")
     private int yearOfBirth;
     //phone телефон пользователя
     private String phone;
     //mail електроная почта пользователя
     private String mail;
-    //adвress пользователя
+    //address пользователя
     private String address;
-    //chatId номер чата пользователя с ботом
-    private Long chatId;
     //status пользователя
     @JsonBackReference
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cat_id")
     private Cat cat;
+
     //Пустой конструктор класса
     public CatUsers() {
     }
+
     //конструктор класса с полями name, phone, chatId.
     public CatUsers(String name, String phone, Long chatId) {
         this.name = name;
         this.phone = phone;
         this.chatId = chatId;
     }
+
     //Конструктор класса со всеми полями.
-    public CatUsers(Long id, String name, int yearOfBirth, String phone, String mail, String address, Long chatId) {
-        this.id = id;
+    public CatUsers(String name, int yearOfBirth, String phone, String mail, String address, Long chatId) {
         this.name = name;
         this.yearOfBirth = yearOfBirth;
         this.phone = phone;

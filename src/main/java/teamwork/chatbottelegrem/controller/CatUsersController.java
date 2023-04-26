@@ -17,11 +17,11 @@ public class CatUsersController {
     public CatUsersController(CatUsersService service) {
         this.service = service;
     }
-    @Operation(summary = "Получение пользователя по id")
-    @GetMapping("/{id}")
-    public CatUsers getById(@PathVariable Long id) {
-        return this.service.getById(id);
-    }
+//    @Operation(summary = "Получение пользователя по id")
+//    @GetMapping("/{id}")
+//    public CatUsers getById(@PathVariable Long id) {
+//        return this.service.getById(id);
+//    }
     @Operation(summary = "Создание пользователя")
     @PostMapping()
     public CatUsers save(@RequestBody CatUsers catUsers) {

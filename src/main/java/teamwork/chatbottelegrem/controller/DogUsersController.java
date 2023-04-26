@@ -25,7 +25,7 @@ public class DogUsersController {
     @Operation(summary = "Получение пользователя по chat id")
     @GetMapping("/{chatId}")
     public DogUsers getByChatId(@PathVariable Long chatId) {
-        return dogUsersService.getByChatId(chatId);
+        return dogUsersService.getById(chatId);
     }
     @Operation(summary = "Создание пользователя")
     @PostMapping()

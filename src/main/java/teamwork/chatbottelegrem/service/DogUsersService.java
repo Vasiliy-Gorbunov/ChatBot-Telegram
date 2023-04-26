@@ -26,7 +26,4 @@ public class DogUsersService {
         dogUsersRepository.deleteById(id);
     }
 
-    public DogUsers getByChatId(Long chatId) {
-        return dogUsersRepository.getDogOwnerByChatId(chatId);
-    }
 }
