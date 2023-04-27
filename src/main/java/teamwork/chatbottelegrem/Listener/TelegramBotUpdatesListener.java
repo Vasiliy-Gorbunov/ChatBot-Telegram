@@ -2,13 +2,12 @@ package teamwork.chatbottelegrem.Listener;
 
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.UpdatesListener;
-import com.pengrad.telegrambot.model.Contact;
-import com.pengrad.telegrambot.model.Document;
-import com.pengrad.telegrambot.model.Message;
-import com.pengrad.telegrambot.model.Update;
+import com.pengrad.telegrambot.model.*;
 import com.pengrad.telegrambot.request.ForwardMessage;
+import com.pengrad.telegrambot.request.GetFile;
 import com.pengrad.telegrambot.request.SendMessage;
 import com.pengrad.telegrambot.response.SendResponse;;
+import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,7 +22,9 @@ import teamwork.chatbottelegrem.service.ContextService;
 import teamwork.chatbottelegrem.service.DogUsersService;
 
 import javax.annotation.PostConstruct;
-import java.io.File;
+import java.io.IOException;
+import java.net.URL;
+import java.time.LocalDateTime;
 import java.util.List;
 
 
@@ -31,6 +32,10 @@ import java.util.List;
 public class TelegramBotUpdatesListener implements UpdatesListener {
     @Value("${volunteer-chat-id}")
     private Long volunteerChatId;
+    @Value("${telegram.bot.token}")
+    private String token;
+    @Value("${data.path}")
+    private String dataPath;
     private final Logger logger = LoggerFactory.getLogger(TelegramBotUpdatesListener.class);
 
     private final TelegramBot telegramBot;
@@ -186,11 +191,23 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
                     }
                     case null -> {
                         Context context = contextService.getByChatId(chatId).get();
-                        if (message.document() != null) {
-                            Document document = message.document();
-                            File file = new File(document.fileId());
+                        //Проверка на наличие фото в сообщении
+                        if (message.photo() != null) {
+                            //Фото получается в виде массива из 4-х одинаковых фото разного размера
+                            PhotoSize[] photos = message.photo();
+                            //Выбираем последнее фото из массива - оригинал
+                            PhotoSize photo = photos[photos.length-1];
+                            //Получаем фото в виде файла в телеграм формате
+                            File file = telegramBot.execute(new GetFile(photo.fileId())).file();
+                            //Скачиваем его
+                            saveReceivedFileToLocalDirectory(file, chatId);
 
+                            //Здесь нужно добавить отправку названия файла и путь к нему в БД
 
+                        //Проверка на наличие документа (фото можно отправить документом, поэтому проверка необходима)
+                        } else if (message.document() != null) {
+                            File file = telegramBot.execute(new GetFile(message.document().fileId())).file();
+                            saveReceivedFileToLocalDirectory(file, chatId);
                         } else if (context.getShelterType().equals(
                                 ButtonCommand.CAT.getCommand()) && update.message() != null && contact != null) {
                             catUsersService.update(contact.firstName(), contact.phoneNumber(), chatId);
@@ -212,6 +229,24 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
             logger.error(e.getMessage(), e);
         }
         return UpdatesListener.CONFIRMED_UPDATES_ALL;
+    }
+
+    /**
+     * Метод для сохранения присланного боту файла в локальную директорию
+     * с созданием в ней папки с chatId и названием файла в виде Даты-времени.
+     * @param file (Формат File com.pengrad.telegrambot.model.File)
+     * @param chatId
+     */
+    private void saveReceivedFileToLocalDirectory(File file, Long chatId) {
+        String path = file.filePath();
+        String localDateTime = LocalDateTime.now().toString();
+        try {
+            URL url = new URL("https://api.telegram.org/file/bot" + token + "/" + path);
+            String filePath = dataPath + chatId + "/" + localDateTime;
+            FileUtils.copyURLToFile(url, new java.io.File(filePath));
+        } catch (IOException e) {
+            logger.error(e.getMessage(), e);
+        }
     }
 
     public void sendForwardMessage(long chatId, int messageId) {
