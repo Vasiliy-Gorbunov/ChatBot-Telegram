@@ -42,7 +42,7 @@ public class CatUsersService {
 
         return this.repository.findAll();
     }
-    public Collection<CatUsers> getByChatId(Long chatId) {
+    public CatUsers getByChatId(Long chatId) {
         logger.info("Was invoked method to remove a catOwners by chatId={}", chatId);
 
         return this.repository.findByChatId(chatId);

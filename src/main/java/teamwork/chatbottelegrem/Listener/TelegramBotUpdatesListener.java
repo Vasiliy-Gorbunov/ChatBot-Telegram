@@ -17,6 +17,7 @@ import teamwork.chatbottelegrem.Model.Context;
 import teamwork.chatbottelegrem.Model.DogUsers;
 import teamwork.chatbottelegrem.botInterface.ButtonCommand;
 import teamwork.chatbottelegrem.botInterface.KeyBoard;
+import teamwork.chatbottelegrem.service.CatUsersReportsService;
 import teamwork.chatbottelegrem.service.CatUsersService;
 import teamwork.chatbottelegrem.service.ContextService;
 import teamwork.chatbottelegrem.service.DogUsersService;
@@ -42,16 +43,17 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
     private final KeyBoard keyBoard;
     private final CatUsersService catUsersService;
     private final DogUsersService dogUsersService;
+    private final CatUsersReportsService catUsersReportsService;
 
     private final ContextService contextService;
 
-    public TelegramBotUpdatesListener(TelegramBot telegramBot, KeyBoard keyBoard, ContextService contextService, CatUsersService catUsersService, DogUsersService dogUsersService) {
+    public TelegramBotUpdatesListener(TelegramBot telegramBot, KeyBoard keyBoard, ContextService contextService, CatUsersService catUsersService, DogUsersService dogUsersService, CatUsersReportsService catUsersReportsService) {
         this.telegramBot = telegramBot;
         this.keyBoard = keyBoard;
         this.contextService = contextService;
         this.catUsersService = catUsersService;
         this.dogUsersService = dogUsersService;
-
+        this.catUsersReportsService = catUsersReportsService;
     }
 
     public static ButtonCommand parse(String buttonCommand) {
@@ -94,7 +96,7 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
                     }
                     case CAT -> {
                         Context context = contextService.getByChatId(chatId).get();
-                        if (catUsersService.getByChatId(chatId).isEmpty()) {
+                        if (catUsersService.getByChatId(chatId) != null) {
                             CatUsers catUsers = new CatUsers();
                             catUsers.setChatId(chatId);
                             catUsersService.create(catUsers);
@@ -200,9 +202,14 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
                             //Получаем фото в виде файла в телеграм формате
                             File file = telegramBot.execute(new GetFile(photo.fileId())).file();
                             //Скачиваем его
-                            saveReceivedFileToLocalDirectory(file, chatId);
+                            String path = saveReceivedFileToLocalDirectory(file, chatId);
 
-                            //Здесь нужно добавить отправку названия файла и путь к нему в БД
+                            //Захват подписи к фото
+                            String tekst = message.caption();
+
+                            //Путь хранения фото с подписью и текущей датой записывается в БД
+                            catUsersReportsService.addPhoto(chatId, path, LocalDateTime.now(), tekst);
+
 
                         //Проверка на наличие документа (фото можно отправить документом, поэтому проверка необходима)
                         } else if (message.document() != null) {
@@ -235,17 +242,18 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
      * Метод для сохранения присланного боту файла в локальную директорию
      * с созданием в ней папки с chatId и названием файла в виде Даты-времени.
      * @param file (Формат File com.pengrad.telegrambot.model.File)
-     * @param chatId
      */
-    private void saveReceivedFileToLocalDirectory(File file, Long chatId) {
+    private String saveReceivedFileToLocalDirectory(File file, Long chatId) {
         String path = file.filePath();
         String localDateTime = LocalDateTime.now().toString();
         try {
             URL url = new URL("https://api.telegram.org/file/bot" + token + "/" + path);
             String filePath = dataPath + chatId + "/" + localDateTime;
             FileUtils.copyURLToFile(url, new java.io.File(filePath));
+            return filePath;
         } catch (IOException e) {
             logger.error(e.getMessage(), e);
+            return null;
         }
     }
 

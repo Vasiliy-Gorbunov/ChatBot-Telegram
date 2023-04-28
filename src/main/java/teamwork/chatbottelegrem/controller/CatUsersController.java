@@ -41,7 +41,7 @@ public class CatUsersController {
     @GetMapping("/all")
     public Collection<CatUsers> getAll(@RequestParam(required = false) Long chatId) {
         if (chatId != null) {
-            return this.service.getByChatId(chatId);
+            return (Collection<CatUsers>) this.service.getByChatId(chatId);
         }
         return this.service.getAll();
     }

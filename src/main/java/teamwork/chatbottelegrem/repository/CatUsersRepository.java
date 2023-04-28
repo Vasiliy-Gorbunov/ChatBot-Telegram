@@ -10,6 +10,6 @@ import java.util.Set;
 
 @Repository
 public interface CatUsersRepository extends JpaRepository<CatUsers, Long> {
-    Set<CatUsers> findByChatId(Long chatId);
+    CatUsers findByChatId(Long chatId);
 
 }
