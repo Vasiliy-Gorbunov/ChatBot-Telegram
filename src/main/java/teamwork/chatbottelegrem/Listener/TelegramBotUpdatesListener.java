@@ -102,7 +102,7 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
                         if(dogUsersService.getByChatId(chatId).isEmpty()) {
                             DogUsers dogUsers = new DogUsers();
                             dogUsers.setChatId(chatId);
-                            dogUsersService.save(dogUsers);
+                            dogUsersService.create(dogUsers);
                             context.setDogUsers(dogUsers);
                         }
                         context.setShelterType(ButtonCommand.DOG.getCommand());
@@ -194,7 +194,7 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
                             DogUsers dogUsers = context.getDogUsers();
                             dogUsers.setPhone(contact.phoneNumber());
                             dogUsers.setName(contact.firstName());
-                            dogUsersService.save(dogUsers);
+                            dogUsersService.update(dogUsers);
                         }
                         sendForwardMessage(chatId, messageId);
                         sendResponseMessage(chatId, "Мы получили ваши контактные данные");

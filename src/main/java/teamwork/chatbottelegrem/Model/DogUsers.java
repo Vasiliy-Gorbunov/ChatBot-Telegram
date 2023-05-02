@@ -1,54 +1,44 @@
 package teamwork.chatbottelegrem.Model;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.Objects;
 
-
+/**
+ * Класс владельца собаки
+ */
+@Data
 @Entity
 @AllArgsConstructor
-@NoArgsConstructor
 @Table(name = "dogUsers")
 public class DogUsers {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
-    @Column(name = "first_name")
-    private String firstName;
-    @Column(name = "second_name")
-    private String secondName;
+    private Long id;
+    @Column(name = "name")
+    private String name;
+    @Column(name="yearOfBirth")
+    private int yearOfBirth;
     @Column(name = "number")
-    private int number;
-    @Override
-    public String toString() {
-        return "model.Employee{" +
-                "id=" + id +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + secondName + '\'' +
-                ", number='" + number + '\'' +
-                '}';
+    private String number;
+    @JsonBackReference
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "dog_id")
+    private Dog dog;
+    //Пустой конструктор класса
+    public DogUsers() {
     }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        teamwork.chatbottelegrem.Model.DogUsers dogUsers = (teamwork.chatbottelegrem.Model.DogUsers) o;
-        return id == dogUsers.id && number == dogUsers.number && Objects.equals(firstName, dogUsers.firstName) && Objects.equals(secondName, dogUsers.secondName);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, firstName, secondName, number);
+    //конструктор класса с полями name, phone, chatId.
+    public DogUsers(String name, String phone, Long chatId) {
+        this.name = name;
+        this.number = phone;
     }
 
     public void setChatId(long chatId) {
-    }
-
-    public boolean isEmpty() {
-        return false;
     }
 
     public void setPhone(String phoneNumber) {

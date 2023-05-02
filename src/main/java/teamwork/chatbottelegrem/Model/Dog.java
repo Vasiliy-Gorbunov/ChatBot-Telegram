@@ -6,7 +6,9 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-
+/**
+ * Класс собаки
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

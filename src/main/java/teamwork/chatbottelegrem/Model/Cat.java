@@ -6,7 +6,9 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-
+/**
+ * Класс кота
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -19,7 +21,7 @@ public class Cat {
     private String name;
     //Имя
     private String breed;
-    //Порода к
+    //Порода кота
     private int yearOfBirth;
     //Год рождения
     private String info;

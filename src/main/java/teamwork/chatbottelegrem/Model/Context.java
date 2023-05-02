@@ -6,7 +6,9 @@ import lombok.NoArgsConstructor;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
-
+/**
+ * Класс контекста для действий пользователя бота
+ */
 @Entity
 @Data
 @NoArgsConstructor

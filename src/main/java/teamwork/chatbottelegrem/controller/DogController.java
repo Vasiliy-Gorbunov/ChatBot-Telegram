@@ -4,7 +4,9 @@ import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.web.bind.annotation.*;
 import teamwork.chatbottelegrem.Model.Dog;
 import teamwork.chatbottelegrem.service.DogService;
-
+/**
+ * Контроллер класса собаки
+ */
 @RestController
 @RequestMapping("dog")
 public class DogController {
