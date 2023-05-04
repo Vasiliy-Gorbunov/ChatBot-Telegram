@@ -8,15 +8,18 @@ import com.pengrad.telegrambot.request.GetFile;
 import com.pengrad.telegrambot.request.SendMessage;
 import com.pengrad.telegrambot.response.SendResponse;;
 import org.apache.commons.io.FileUtils;
+import org.hibernate.type.TrueFalseType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import teamwork.chatbottelegrem.Model.CatUserReportStatus;
 import teamwork.chatbottelegrem.Model.CatUsers;
 import teamwork.chatbottelegrem.Model.Context;
 import teamwork.chatbottelegrem.Model.DogUsers;
 import teamwork.chatbottelegrem.botInterface.ButtonCommand;
 import teamwork.chatbottelegrem.botInterface.KeyBoard;
+import teamwork.chatbottelegrem.repository.CatUserReportStatusRepository;
 import teamwork.chatbottelegrem.service.CatUsersReportsService;
 import teamwork.chatbottelegrem.service.CatUsersService;
 import teamwork.chatbottelegrem.service.ContextService;
@@ -44,16 +47,18 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
     private final CatUsersService catUsersService;
     private final DogUsersService dogUsersService;
     private final CatUsersReportsService catUsersReportsService;
+    private final CatUserReportStatusRepository catUserReportStatusRepository;
 
     private final ContextService contextService;
 
-    public TelegramBotUpdatesListener(TelegramBot telegramBot, KeyBoard keyBoard, ContextService contextService, CatUsersService catUsersService, DogUsersService dogUsersService, CatUsersReportsService catUsersReportsService) {
+    public TelegramBotUpdatesListener(TelegramBot telegramBot, KeyBoard keyBoard, ContextService contextService, CatUsersService catUsersService, DogUsersService dogUsersService, CatUsersReportsService catUsersReportsService, CatUserReportStatusRepository catUserReportStatusRepository) {
         this.telegramBot = telegramBot;
         this.keyBoard = keyBoard;
         this.contextService = contextService;
         this.catUsersService = catUsersService;
         this.dogUsersService = dogUsersService;
         this.catUsersReportsService = catUsersReportsService;
+        this.catUserReportStatusRepository = catUserReportStatusRepository;
     }
 
     public static ButtonCommand parse(String buttonCommand) {
@@ -209,6 +214,14 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
 
                             //Путь хранения фото с подписью и текущей датой записывается в БД
                             catUsersReportsService.addPhoto(chatId, path, LocalDateTime.now(), tekst);
+                            CatUsers catUser = catUsersService.getByChatId(chatId);
+                            if (catUserReportStatusRepository.existsCatUserReportStatusByCatUsers_ChatId(chatId)) {
+                                Long id = catUserReportStatusRepository.getReferenceByCatUsers_ChatId(chatId).getId();
+                                catUserReportStatusRepository.save(new CatUserReportStatus(id, catUser, true));
+
+                            } else {
+                                catUserReportStatusRepository.save(new CatUserReportStatus(catUser, true));
+                            }
 
 
                         //Проверка на наличие документа (фото можно отправить документом, поэтому проверка необходима)
