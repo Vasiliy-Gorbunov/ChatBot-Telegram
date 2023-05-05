@@ -215,6 +215,8 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
                             //Путь хранения фото с подписью и текущей датой записывается в БД
                             catUsersReportsService.addPhoto(chatId, path, LocalDateTime.now(), tekst);
                             CatUsers catUser = catUsersService.getByChatId(chatId);
+                            catUser.setLastReport(LocalDateTime.now());
+                            catUsersService.update(catUser);
                             if (catUserReportStatusRepository.existsCatUserReportStatusByCatUsers_ChatId(chatId)) {
                                 Long id = catUserReportStatusRepository.getReferenceByCatUsers_ChatId(chatId).getId();
                                 catUserReportStatusRepository.save(new CatUserReportStatus(id, catUser, true));

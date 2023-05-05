@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Data
 @Entity
@@ -24,6 +25,8 @@ public class CatUsers {
     private String mail;
     //address пользователя
     private String address;
+    @Column(name = "last_report")
+    private LocalDateTime lastReport;
     //status пользователя
     @JsonBackReference
     @OneToOne(fetch = FetchType.LAZY)
