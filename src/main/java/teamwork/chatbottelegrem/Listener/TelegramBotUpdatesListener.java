@@ -11,18 +11,23 @@ import com.pengrad.telegrambot.response.SendResponse;;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import teamwork.chatbottelegrem.Model.CatUsers;
 import teamwork.chatbottelegrem.Model.Context;
 import teamwork.chatbottelegrem.Model.DogUsers;
+import teamwork.chatbottelegrem.Model.ReportMessage;
 import teamwork.chatbottelegrem.botInterface.ButtonCommand;
 import teamwork.chatbottelegrem.botInterface.KeyBoard;
 import teamwork.chatbottelegrem.service.CatUsersService;
 import teamwork.chatbottelegrem.service.ContextService;
 import teamwork.chatbottelegrem.service.DogUsersService;
+import teamwork.chatbottelegrem.service.ReportMessageService;
 
 import javax.annotation.PostConstruct;
+import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 
 @Component
@@ -37,13 +42,15 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
     private final DogUsersService dogUsersService;
 
     private final ContextService contextService;
+    private final ReportMessageService reportMessageService;
 
-    public TelegramBotUpdatesListener(TelegramBot telegramBot, KeyBoard keyBoard,ContextService contextService, CatUsersService catUsersService, DogUsersService dogUsersService) {
+    public TelegramBotUpdatesListener(TelegramBot telegramBot, KeyBoard keyBoard,ContextService contextService, CatUsersService catUsersService, DogUsersService dogUsersService, ReportMessageService reportMessageService) {
         this.telegramBot = telegramBot;
         this.keyBoard = keyBoard;
         this.contextService = contextService;
         this.catUsersService = catUsersService;
         this.dogUsersService = dogUsersService;
+        this.reportMessageService= reportMessageService;
 
     }
     public static ButtonCommand parse(String buttonCommand) {
@@ -217,7 +224,7 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
     }
 
     /**
-     * Метод отправки текстовых сообщений.
+     * Метод отправки текстовых сообщений
      *
      */
     public void sendResponseMessage(long chatId, String text) {
@@ -226,6 +233,36 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
         if (!sendResponse.isOk()) {
             logger.error("Error during sending message: {}", sendResponse.description());
         }
+    }
+    /**
+     * Метод контроля отчётов пользователей
+     *
+     */
+    @Scheduled(cron = "@daily")
+    public void sendWarning() {
+        for (Context context : contextService.getAll()) {
+            long chatId = context.getChatId();
+            long daysOfReports = reportMessageService.getAll().stream()
+                    .filter(s -> Objects.equals(s.getChatId(), chatId))
+                    .count();
+            if (daysOfReports < 30 && daysOfReports != 0) {
+                long twoDay = 172800000;
+                Date nowTime = new Date(new Date().getTime() - twoDay);
+                Date lastMessageDate = reportMessageService.getAll().stream()
+                        .filter(s -> Objects.equals(s.getChatId(), chatId))
+                        .map(ReportMessage::getLastMessage)
+                        .max(Date::compareTo)
+                        .orElse(null);
+                if (lastMessageDate != null) {
+                    if (lastMessageDate.before(nowTime)) {
+                        sendResponseMessage(chatId, "Прошло два дня после отправки прошлого отчёта. Пожалуйста, отправьте отчёт!");
+                        sendResponseMessage(volunteerChatId, "Пользователь под номером: " + chatId
+                                + " не отправлял отчёты уже более двух дней!");
+                    }
+                }
+            }
+        }
+
     }
 
 }

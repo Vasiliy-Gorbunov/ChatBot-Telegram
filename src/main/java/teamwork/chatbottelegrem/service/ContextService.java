@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 import teamwork.chatbottelegrem.Model.Context;
 import teamwork.chatbottelegrem.repository.ContextRepository;
 
+import java.util.Collection;
 import java.util.Optional;
 /**
  * сервис класса контекста
@@ -17,6 +18,9 @@ public class ContextService {
     }
     public Context saveContext(Context context) {
         return contextRepository.save(context);
+    }
+    public Collection<Context> getAll() {
+        return contextRepository.findAll();
     }
 
     public Optional<Context> getByChatId(Long chatId) {
