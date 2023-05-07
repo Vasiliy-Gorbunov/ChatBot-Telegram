@@ -10,7 +10,9 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
-
+/**
+ * Сервис класса контроля отправки уведомлений
+ */
 @Service
 @Transactional
 public class ReportMessageService {

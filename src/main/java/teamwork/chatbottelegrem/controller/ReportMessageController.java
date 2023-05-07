@@ -10,7 +10,9 @@ import teamwork.chatbottelegrem.Model.ReportMessage;
 import teamwork.chatbottelegrem.service.ReportMessageService;
 
 import java.util.Collection;
-
+/**
+ * Контролеер класса отправки уведомлений
+ */
 @RestController
 @RequestMapping("animalReports")
 public class ReportMessageController {

@@ -43,7 +43,10 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
 
     private final ContextService contextService;
     private final ReportMessageService reportMessageService;
-
+    /**
+     * Класс реализации общения бота с пользователем
+     *
+     */
     public TelegramBotUpdatesListener(TelegramBot telegramBot, KeyBoard keyBoard,ContextService contextService, CatUsersService catUsersService, DogUsersService dogUsersService, ReportMessageService reportMessageService) {
         this.telegramBot = telegramBot;
         this.keyBoard = keyBoard;
@@ -68,6 +71,10 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
         telegramBot.setUpdatesListener(this);
     }
 
+    /**
+     * Метод отвечающий, за принятие команд ботом, и отправления ответа на них
+     *
+     */
     @Override
     public int process(List<Update> updates) {
         try {

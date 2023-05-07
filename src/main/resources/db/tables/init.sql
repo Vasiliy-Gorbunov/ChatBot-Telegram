@@ -24,6 +24,7 @@ CREATE TABLE catUsers
     name          VARCHAR,
     year_of_birth INTEGER,
     info        VARCHAR,
+    email          VARCHAR,
     chat_id       BIGINT,
     cat_id        BIGINT REFERENCES cat (id),
     status        VARCHAR
@@ -35,6 +36,7 @@ CREATE TABLE dogUsers
     name          VARCHAR,
     year_of_birth INTEGER,
    info        VARCHAR,
+   email          VARCHAR,
     chat_id       BIGINT,
     dog_id        BIGINT REFERENCES gog (id),
     status        VARCHAR

@@ -8,7 +8,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Lob;
 import java.util.Date;
-
+/**
+ * Класс контроля отправки уведомлений
+ */
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
