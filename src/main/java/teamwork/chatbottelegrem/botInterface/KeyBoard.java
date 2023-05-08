@@ -35,7 +35,8 @@ public class KeyBoard {
     public void shelterMainMenu(long chatId) {
         ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup(
                 new String[]{ButtonCommand.SHELTER_INFO_MENU.getCommand(), ButtonCommand.HOW_ADOPT_PET_INFO.getCommand()},
-                new String[]{"Прислать отчет о питомце", ButtonCommand.VOLUNTEER.getCommand()});
+                new String[]{ButtonCommand.GET_REPORT_FORM.getCommand(), ButtonCommand.SEND_PET_REPORT.getCommand()},
+                new String[]{ButtonCommand.VOLUNTEER.getCommand()});
         sendResponseMenu(chatId, replyKeyboardMarkup, "Ниже представлено главное меню приюта.");
     }
 

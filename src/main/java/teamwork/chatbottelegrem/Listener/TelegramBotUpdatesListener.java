@@ -19,9 +19,9 @@ import teamwork.chatbottelegrem.Model.DogUsers;
 import teamwork.chatbottelegrem.Model.ReportMessage;
 import teamwork.chatbottelegrem.botInterface.ButtonCommand;
 import teamwork.chatbottelegrem.botInterface.KeyBoard;
-import teamwork.chatbottelegrem.service.CatUsersService;
-import teamwork.chatbottelegrem.service.ContextService;
-import teamwork.chatbottelegrem.service.DogUsersService;
+import teamwork.chatbottelegrem.repository.CatReportRepository;
+import teamwork.chatbottelegrem.repository.DogReportRepository;
+import teamwork.chatbottelegrem.service.*;
 import teamwork.chatbottelegrem.service.ReportMessageService;
 
 import javax.annotation.PostConstruct;
@@ -40,21 +40,26 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
     private final KeyBoard keyBoard;
     private final CatUsersService catUsersService;
     private final DogUsersService dogUsersService;
-
     private final ContextService contextService;
     private final ReportMessageService reportMessageService;
+    private final DogReportRepository dogReportRepository;
+    private final CatReportRepository catReportRepository;
+
+
+
     /**
      * Класс реализации общения бота с пользователем
      *
      */
-    public TelegramBotUpdatesListener(TelegramBot telegramBot, KeyBoard keyBoard,ContextService contextService, CatUsersService catUsersService, DogUsersService dogUsersService, ReportMessageService reportMessageService) {
+    public TelegramBotUpdatesListener(TelegramBot telegramBot, KeyBoard keyBoard,ContextService contextService, CatUsersService catUsersService, DogUsersService dogUsersService, ReportMessageService reportMessageService, DogReportRepository dogReportRepository, CatReportRepository catReportRepository) {
         this.telegramBot = telegramBot;
         this.keyBoard = keyBoard;
         this.contextService = contextService;
         this.catUsersService = catUsersService;
         this.dogUsersService = dogUsersService;
         this.reportMessageService= reportMessageService;
-
+        this.catReportRepository = catReportRepository;
+        this.dogReportRepository = dogReportRepository;
     }
     public static ButtonCommand parse(String buttonCommand) {
         ButtonCommand[] values = ButtonCommand.values();
@@ -195,6 +200,58 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
                                     "Для взятия собаки из приюта необходимы такие документы: ...");
                         }
                     }
+
+                    case GET_REPORT_FORM -> {
+                        Context context = contextService.getByChatId(chatId).get();
+                        if (context.getShelterType().equals(ButtonCommand.CAT.getCommand())) {
+                            sendResponseMessage(chatId,
+                                    """
+                                      - Рацион животного: 
+                                      - Общее самочувствие и привыкание к новому месту:
+                                      - Изменение в поведении: отказ от старых привычек, приобретение новых:
+                                        """);
+                        } else if (context.getShelterType().equals(ButtonCommand.DOG.getCommand())) {
+                            sendResponseMessage(chatId,
+                                    """
+                                       - Рацион животного: 
+                                       - Общее самочувствие и привыкание к новому месту:
+                                       - Изменение в поведении: отказ от старых привычек, приобретение новых:
+                                        """);
+                        }
+                    }
+
+                    case SEND_PET_REPORT -> {
+                        Context context = contextService.getByChatId(chatId).get();
+                        if (context.getShelterType().equals(ButtonCommand.CAT.getCommand())) {
+                            CatReportService catReportService = new CatReportService(catReportRepository, telegramBot);
+                            catReportService.save(update);
+
+                        } else if (context.getShelterType().equals(ButtonCommand.DOG.getCommand())) {
+                            DogReportService dogReportService = new DogReportService(dogReportRepository, telegramBot);
+                            dogReportService.save(update);
+                        }
+                    }
+
+                    case BAD_REPORT_NOTIFICATION -> {
+                        sendResponseMessage(chatId, "Дорогой усыновитель, мы заметили, что ты заполняешь отчет не так подробно, как необходимо. Пожалуйста, подойди ответственнее к этому занятию. В противном случае волонтеры приюта будут обязаны самолично проверять условия содержания животного");
+                    }
+
+                    case SUCCESS_CONGRATULATION -> {
+                        sendResponseMessage(chatId, "Поздравляем! Вы успешно прошли испытательный срок.");
+                    }
+
+                    case ADDITIONAL_PERIOD_14 -> {
+                        sendResponseMessage(chatId, "Вам дополнительно назначено 14 календарных дней испытательного срока");
+                    }
+
+                    case ADDITIONAL_PERIOD_30 -> {
+                        sendResponseMessage(chatId, "Вам дополнительно назначено 30 календарных дней испытательного срока");
+                    }
+
+                    case ADOPTION_REFUSE -> {
+                        sendResponseMessage(chatId, "К сожалению, Вы не прошли испытательный срок. Пожалуйста, верните животное в приют в течение двух календарных дней.");
+                    }
+
                     case null -> {
                         Context context = contextService.getByChatId(chatId).get();
                         if(context.getShelterType().equals(

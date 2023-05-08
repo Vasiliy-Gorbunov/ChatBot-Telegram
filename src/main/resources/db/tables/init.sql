@@ -49,3 +49,24 @@ CREATE TABLE contexts
     cat_owner_id   BIGINT REFERENCES cat_owner (id),
     dog_owner_id   BIGINT REFERENCES dog_owner (id)
 );
+
+
+CREATE TABLE cat_report
+(
+    id  BIGINT generated
+        by default as identity primary key,
+    chat_id bigint NOT NULL,
+    text_report TEXT,
+    file_id TEXT,
+    date DATE NOT NULL
+);
+
+CREATE TABLE dog_report
+(
+    id  BIGINT generated
+        by default as identity primary key,
+    chat_id bigint NOT NULL,
+    text_report TEXT,
+    file_id TEXT,
+    date DATE NOT NULL
+);
