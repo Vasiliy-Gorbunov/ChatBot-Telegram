@@ -13,8 +13,14 @@ public enum ButtonCommand {
     VOLUNTEER("Связь с волонтером"),
     SHELTER_INFO("Общая информация"),
     SHELTER_ADDRESS_SCHEDULE("Адрес и график работы приюта"),
-    SEND_CONTACT("Отправить контактные данные");
-
+    SEND_CONTACT("Отправить контактные данные"),
+    GET_REPORT_FORM("Получить форму отчета о питомце"),
+    SEND_PET_REPORT("Прислать отчет о питомце"),
+    BAD_REPORT_NOTIFICATION ("/bad_report_notification"),
+    SUCCESS_CONGRATULATION("success_congratulations"),
+    ADDITIONAL_PERIOD_14("/additional_period_14"),
+    ADDITIONAL_PERIOD_30("/additional_period_30"),
+    ADOPTION_REFUSE("/adoption_refuse");
 
     private final String command;
 
