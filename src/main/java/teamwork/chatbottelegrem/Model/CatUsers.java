@@ -23,6 +23,8 @@ public class CatUsers {
     private int yearOfBirth;
     @Column(name = "number")
     private String number;
+    @Column(name = "chat_id")
+    private Long chatId;
     @JsonBackReference
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cat_id")
