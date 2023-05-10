@@ -95,7 +95,7 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
                 switch (parse(text)) {
                     case START -> {
                         if(contextService.getByChatId(chatId).isEmpty()){
-                            sendResponseMessage(chatId, "Привет! Я могу показать информацию о приютах," +
+                            sendResponseMessage(chatId, "Привет! Я могу показать информацию о приютах, " +
                                     "как взять животное из приюта и принять отчет о питомце");
                             Context context = new Context();
                             context.setChatId(chatId);
