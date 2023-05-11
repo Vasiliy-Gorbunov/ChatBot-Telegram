@@ -39,7 +39,7 @@ public class DogUsersService {
         if (dogUsers.getId() != null && getById(dogUsers.getId()) != null) {
             return repository.save(dogUsers);
         }
-        throw new CatUserNotFoundException();
+        throw new DogUserNotFoundException();
     }
     /**
      * Удаление данных о пользователе
