@@ -16,6 +16,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import teamwork.chatbottelegrem.Model.Context;
 import teamwork.chatbottelegrem.botInterface.ButtonCommand;
 import teamwork.chatbottelegrem.botInterface.KeyBoard;
+import teamwork.chatbottelegrem.service.CatUsersService;
 import teamwork.chatbottelegrem.service.ContextService;
 
 import java.io.IOException;
@@ -26,6 +27,7 @@ import java.util.Collections;
 import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.when;
 import static teamwork.chatbottelegrem.botInterface.ButtonCommand.*;
 
@@ -38,6 +40,8 @@ public class TelegramBotUpdatesListenerTest {
     private ContextService contextService;
     @Mock
     private KeyBoard keyBoard;
+    @Mock
+    private CatUsersService catUsersService;
 
     @InjectMocks
     private TelegramBotUpdatesListener telegramBotUpdatesListener;
@@ -81,10 +85,13 @@ public class TelegramBotUpdatesListenerTest {
                     "ok": true
                 }
                 """, SendResponse.class);
-        Context context = new Context(update.message().chat().id(), CAT.getCommand());
+        Long chatId = update.message().chat().id();
+        Context context = new Context(chatId, CAT.getCommand());
 
         when(telegramBot.execute(any())).thenReturn(sendResponse);
-        when(contextService.getByChatId(update.message().chat().id())).thenReturn(Optional.of(context));
+        when(contextService.getByChatId(chatId)).thenReturn(Optional.of(context));
+
+        org.junit.jupiter.api.Assertions.assertEquals(CAT.getCommand(), context.getShelterType());
 
         telegramBotUpdatesListener.process(Collections.singletonList(update));
 
@@ -92,9 +99,12 @@ public class TelegramBotUpdatesListenerTest {
         Mockito.verify(telegramBot).execute(argumentCaptor.capture());
         SendMessage actual = argumentCaptor.getValue();
 
-        Assertions.assertThat(actual.getParameters().get("chat_id")).isEqualTo(update.message().chat().id());
+        Assertions.assertThat(actual.getParameters().get("chat_id")).isEqualTo(chatId);
         Assertions.assertThat(actual.getParameters().get("text")).isEqualTo(
                 "Вы выбрали кошачий приют.");
+
+        Mockito.verify(contextService, times(1)).saveContext(context);
+        Mockito.verify(keyBoard, times(1)).shelterMainMenu(chatId);
     }
 
 
