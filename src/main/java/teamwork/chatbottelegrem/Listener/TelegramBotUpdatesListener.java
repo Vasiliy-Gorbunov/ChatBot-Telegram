@@ -257,7 +257,7 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
                         if(context.getShelterType().equals(
                                 ButtonCommand.CAT.getCommand()) && update.message() != null && contact != null) {
                             CatUsers catUsers = context.getCatUsers();
-                            catUsers.setPhone(contact.phoneNumber());
+                            catUsers.setNumber(contact.phoneNumber());
                             catUsers.setName(contact.firstName());
                             catUsersService.update(catUsers);
                         } else if(context.getShelterType().equals(

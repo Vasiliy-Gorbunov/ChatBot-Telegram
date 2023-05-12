@@ -37,13 +37,4 @@ public class CatUsers {
         this.name = name;
         this.number = phone;
     }
-
-    public void setChatId(long chatId) {
-    }
-
-    public void setPhone(String phoneNumber) {
-    }
-
-    public void setName(String firstName) {
-    }
 }
