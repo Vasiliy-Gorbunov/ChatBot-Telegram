@@ -13,6 +13,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import teamwork.chatbottelegrem.Model.Context;
+import teamwork.chatbottelegrem.botInterface.ButtonCommand;
 import teamwork.chatbottelegrem.botInterface.KeyBoard;
 import teamwork.chatbottelegrem.service.ContextService;
 
@@ -21,9 +23,11 @@ import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Collections;
+import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
+import static teamwork.chatbottelegrem.botInterface.ButtonCommand.*;
 
 @ExtendWith(MockitoExtension.class)
 public class TelegramBotUpdatesListenerTest {
@@ -47,7 +51,7 @@ public class TelegramBotUpdatesListenerTest {
     public void handleStartTest() throws URISyntaxException, IOException {
         String json = Files.readString(Path.of(
                 TelegramBotUpdatesListenerTest.class.getResource("update.json").toURI()));
-        Update update = BotUtils.fromJson(json.replace("%text%", "/start"), Update.class);
+        Update update = BotUtils.fromJson(json.replace("%text%", START.getCommand()), Update.class);
         SendResponse sendResponse = BotUtils.fromJson("""
                 {
                     "ok": true
@@ -62,7 +66,36 @@ public class TelegramBotUpdatesListenerTest {
         SendMessage actual = argumentCaptor.getValue();
 
         Assertions.assertThat(actual.getParameters().get("chat_id")).isEqualTo(update.message().chat().id());
-        Assertions.assertThat(actual.getParameters().get("text")).isEqualTo("Привет! Я могу показать информацию о приютах, " +
+        Assertions.assertThat(actual.getParameters().get("text")).isEqualTo(
+                "Привет! Я могу показать информацию о приютах, " +
                 "как взять животное из приюта и принять отчет о питомце");
     }
+
+    @Test
+    public void buttonCatTest() throws URISyntaxException, IOException {
+        String json = Files.readString(Path.of(
+                TelegramBotUpdatesListenerTest.class.getResource("update.json").toURI()));
+        Update update = BotUtils.fromJson(json.replace("%text%", CAT.getCommand()), Update.class);
+        SendResponse sendResponse = BotUtils.fromJson("""
+                {
+                    "ok": true
+                }
+                """, SendResponse.class);
+        Context context = new Context(update.message().chat().id(), CAT.getCommand());
+
+        when(telegramBot.execute(any())).thenReturn(sendResponse);
+        when(contextService.getByChatId(update.message().chat().id())).thenReturn(Optional.of(context));
+
+        telegramBotUpdatesListener.process(Collections.singletonList(update));
+
+        ArgumentCaptor<SendMessage> argumentCaptor = ArgumentCaptor.forClass(SendMessage.class);
+        Mockito.verify(telegramBot).execute(argumentCaptor.capture());
+        SendMessage actual = argumentCaptor.getValue();
+
+        Assertions.assertThat(actual.getParameters().get("chat_id")).isEqualTo(update.message().chat().id());
+        Assertions.assertThat(actual.getParameters().get("text")).isEqualTo(
+                "Вы выбрали кошачий приют.");
+    }
+
+
 }
