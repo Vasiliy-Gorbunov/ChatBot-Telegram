@@ -33,7 +33,7 @@ public class Context {
     }
 
     public CatUsers getCatUsers() {
-        return null;
+        return catUser;
     }
 
     public DogUsers getDogUsers() {
