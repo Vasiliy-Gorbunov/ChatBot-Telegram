@@ -16,8 +16,8 @@ public class ContextService {
     public ContextService(ContextRepository contextRepository) {
         this.contextRepository = contextRepository;
     }
-    public Context saveContext(Context context) {
-        return contextRepository.save(context);
+    public void saveContext(Context context) {
+        contextRepository.save(context);
     }
     public Collection<Context> getAll() {
         return contextRepository.findAll();

@@ -25,6 +25,8 @@ public class DogUsers {
     private int yearOfBirth;
     @Column(name = "number")
     private String number;
+    @Column(name = "chat_id")
+    private Long chatId;
     @JsonBackReference
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "dog_id")
@@ -36,6 +38,7 @@ public class DogUsers {
     public DogUsers(String name, String phone, Long chatId) {
         this.name = name;
         this.number = phone;
+        this.chatId = chatId;
     }
 
     public void setChatId(long chatId) {
