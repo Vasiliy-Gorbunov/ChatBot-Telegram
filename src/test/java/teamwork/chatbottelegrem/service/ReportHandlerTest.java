@@ -7,11 +7,10 @@ import com.pengrad.telegrambot.request.SendMessage;
 import com.pengrad.telegrambot.response.SendResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.slf4j.Logger;
 
 
@@ -20,45 +19,81 @@ import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@ExtendWith(MockitoExtension.class)
 class ReportHandlerTest {
 
-
+    String json = Files.readString(Path.of(ReportHandlerTest.class.getResource("update.json").toURI()));
+    SendResponse sendResponse = BotUtils.fromJson("""
+            {
+            "ok": true
+            }
+            """, SendResponse.class
+    );
     @Mock
     TelegramBot telegramBot;
     @Mock
     Logger logger;
     @InjectMocks
     ReportHandler reportHandler;
-@BeforeEach
-public void iniMocks() {
-    MockitoAnnotations.initMocks(this);
-}
 
     ReportHandlerTest() throws IOException, URISyntaxException {
-
     }
 
+    @BeforeEach
+    public void iniMocks() {
+        MockitoAnnotations.initMocks(this);
+    }
 
     @Test
-    void checkReport() throws URISyntaxException, IOException {
-        String json = Files.readString(Path.of(ReportHandlerTest.class.getResource("update.json").toURI()));
-        Update update = BotUtils.fromJson(json.replace("%text%", " "), Update.class);
+    void checkEmptyReport() {
+        Update update = BotUtils.fromJson(json.replace("%text%", ""), Update.class);
         SendMessage sendMessage = new SendMessage(update.message().chat().id(), "Пожалуйста, направьте текстовый отчет о питомце");
         SendResponse sendResponse = BotUtils.fromJson("""
                 {
-                "result": 200,
                 "ok": true
                 }
-                """, SendResponse.class);
+                """, SendResponse.class
+        );
 
-        when(telegramBot.execute(sendMessage)).thenReturn(sendResponse);
+        when(telegramBot.execute(any())).thenReturn(sendResponse);
         reportHandler.checkReport(update);
+        ArgumentCaptor<SendMessage> argumentCaptor = ArgumentCaptor.forClass(SendMessage.class);
+        verify(telegramBot).execute(argumentCaptor.capture());
+        SendMessage actual = argumentCaptor.getValue();
+        assertEquals(actual.getParameters().get("chat_id"), update.message().chat().id());
+        assertEquals(actual.getParameters().get("text"), sendMessage.getParameters().get("text"));
+    }
 
-        verify(telegramBot).execute(sendMessage);
+    @Test
+    void checkReport2() {
+
+        Update update = BotUtils.fromJson(json.replace("%text%", "    "), Update.class);
+        SendMessage sendMessage = new SendMessage(update.message().chat().id(), "Пожалуйста, направьте текстовый отчет о питомце");
+        when(telegramBot.execute(any())).thenReturn(sendResponse);
+        reportHandler.checkReport(update);
+        ArgumentCaptor<SendMessage> argumentCaptor = ArgumentCaptor.forClass(SendMessage.class);
+        verify(telegramBot).execute(argumentCaptor.capture());
+        SendMessage actual2 = argumentCaptor.getValue();
+        assertEquals(actual2.getParameters().get("chat_id"), update.message().chat().id());
+        assertEquals(actual2.getParameters().get("text"), sendMessage.getParameters().get("text"));
+    }
+    @Test
+    void checkNullMessageReport() throws URISyntaxException, IOException {
+        String json = Files.readString(Path.of(ReportHandlerTest.class.getResource("updateWithoutPhoto.json").toURI()));
+        Update update = BotUtils.fromJson(json.replace("%text%", "С питомцем всё в порядке"), Update.class);
+        SendMessage sendMessage = new SendMessage(update.message().chat().id(), "Пожалуйста, направьте фото питомца");
+        when(telegramBot.execute(any())).thenReturn(sendResponse);
+        reportHandler.checkReport(update);
+        ArgumentCaptor<SendMessage> argumentCaptor = ArgumentCaptor.forClass(SendMessage.class);
+        verify(telegramBot).execute(argumentCaptor.capture());
+        SendMessage actual2 = argumentCaptor.getValue();
+        assertEquals(actual2.getParameters().get("chat_id"), update.message().chat().id());
+        assertEquals(actual2.getParameters().get("text"), sendMessage.getParameters().get("text"));
 
     }
+
 }
