@@ -95,7 +95,7 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
                 switch (parse(text)) {
                     case START -> {
                         if(contextService.getByChatId(chatId).isEmpty()){
-                            sendResponseMessage(chatId, "Привет! Я могу показать информацию о приютах," +
+                            sendResponseMessage(chatId, "Привет! Я могу показать информацию о приютах, " +
                                     "как взять животное из приюта и принять отчет о питомце");
                             Context context = new Context();
                             context.setChatId(chatId);
@@ -160,7 +160,7 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
                                     """);
                         } else if(context.getShelterType().equals(ButtonCommand.DOG.getCommand())) {
                             sendResponseMessage(chatId, """
-                                    Адрес кошачего приюта - ...
+                                    Адрес собачьего приюта - ...
                                     График работы - ...
                                     """);
                         }
@@ -257,7 +257,7 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
                         if(context.getShelterType().equals(
                                 ButtonCommand.CAT.getCommand()) && update.message() != null && contact != null) {
                             CatUsers catUsers = context.getCatUsers();
-                            catUsers.setPhone(contact.phoneNumber());
+                            catUsers.setNumber(contact.phoneNumber());
                             catUsers.setName(contact.firstName());
                             catUsersService.update(catUsers);
                         } else if(context.getShelterType().equals(
