@@ -33,8 +33,10 @@ public class CatUsers {
     public CatUsers() {
     }
     //конструктор класса с полями name, phone, chatId.
+
     public CatUsers(String name, String phone, Long chatId) {
         this.name = name;
         this.number = phone;
+        this.chatId = chatId;
     }
 }

@@ -1,6 +1,5 @@
 package teamwork.chatbottelegrem.service;
 
-import org.aspectj.lang.annotation.Before;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -17,7 +16,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 class DogServiceTest {
-    Dog dog = new Dog(123123L, "Шарик", "Дворняга", 2022, "информация");
+    Dog DOG_EXAPMLE = new Dog(123123L, "Шарик", "Дворняга", 2022, "информация");
     @Mock
     DogRepository repository;
     @InjectMocks
@@ -32,14 +31,14 @@ class DogServiceTest {
 
     @Test
     void addDog() {
-        service.addDog(dog);
-        verify(repository).save(dog);
+        service.addDog(DOG_EXAPMLE);
+        verify(repository).save(DOG_EXAPMLE);
     }
 
     @Test
     void getById() {
-        when(repository.findById(dog.getId())).thenReturn(Optional.ofNullable(dog));
-        assertEquals(dog, service.getById(dog.getId()));
+        when(repository.findById(DOG_EXAPMLE.getId())).thenReturn(Optional.ofNullable(DOG_EXAPMLE));
+        assertEquals(DOG_EXAPMLE, service.getById(DOG_EXAPMLE.getId()));
         Long numberNeverUsed = 43214321L;
         assertThrows(DogNotFoundException.class, () -> {
             service.getById(numberNeverUsed);
@@ -50,23 +49,23 @@ class DogServiceTest {
     void update() {
 
         assertThrows(DogNotFoundException.class, () -> {
-            service.update(dog);
+            service.update(DOG_EXAPMLE);
         }, "Собака не найдена");
-        dog.setId(null);
+        DOG_EXAPMLE.setId(null);
         assertThrows(DogNotFoundException.class, () -> {
-            service.update(dog);
+            service.update(DOG_EXAPMLE);
         }, "Собака не найдена");
-        dog.setId(123123L);
-        when(repository.findById(dog.getId())).thenReturn(Optional.ofNullable(dog));
-        service.update(dog);
-        verify(repository).save(dog);
+        DOG_EXAPMLE.setId(123123L);
+        when(repository.findById(DOG_EXAPMLE.getId())).thenReturn(Optional.ofNullable(DOG_EXAPMLE));
+        service.update(DOG_EXAPMLE);
+        verify(repository).save(DOG_EXAPMLE);
 
     }
 
     @Test
     void removeById() {
-        service.removeById(dog.getId());
-        verify(repository).deleteById(dog.getId());
+        service.removeById(DOG_EXAPMLE.getId());
+        verify(repository).deleteById(DOG_EXAPMLE.getId());
         
     }
 }

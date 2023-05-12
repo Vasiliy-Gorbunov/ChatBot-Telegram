@@ -5,10 +5,9 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import teamwork.chatbottelegrem.Model.Dog;
-import teamwork.chatbottelegrem.Model.DogUsers;
-import teamwork.chatbottelegrem.exception.DogUserNotFoundException;
-import teamwork.chatbottelegrem.repository.DogUsersRepository;
+import teamwork.chatbottelegrem.Model.CatUsers;
+import teamwork.chatbottelegrem.exception.CatUserNotFoundException;
+import teamwork.chatbottelegrem.repository.CatUsersRepository;
 
 import java.util.*;
 
@@ -16,28 +15,28 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-class DogUsersServiceTest {
-    DogUsers USER_EXAMPLE = new DogUsers(123123L, "ФИО", 1992, "9171122335", 131313L,
-            new Dog(123123123L, "Шарик", "Дворняга", 2020, "Информация"));
+class CatUsersServiceTest {
+    CatUsers USER_EXAMPLE = new CatUsers("ФИО", "9171122335", 123123L);
     @Mock
-    DogUsersRepository repository;
+    CatUsersRepository repository;
     @InjectMocks
-    DogUsersService service;
-
+    CatUsersService service;
     @BeforeEach
-    public void iniMocks() {
+    public void initMock(){
         MockitoAnnotations.initMocks(this);
     }
 
 
+
     @Test
     void getById() {
+        USER_EXAMPLE.setId(123123123L);
         when(repository.findById(USER_EXAMPLE.getId())).thenReturn(Optional.ofNullable(USER_EXAMPLE));
         assertEquals(USER_EXAMPLE, service.getById(USER_EXAMPLE.getId()));
-        USER_EXAMPLE.setId(135487L);
-        assertThrows(DogUserNotFoundException.class, () -> {
+        USER_EXAMPLE.setId(12313L);
+        assertThrows(CatUserNotFoundException.class, () -> {
             service.getById(USER_EXAMPLE.getId());
-        }, "Владелец собаки не найден");
+        }, "Владелец кота не найден");
     }
 
     @Test
@@ -48,17 +47,18 @@ class DogUsersServiceTest {
 
     @Test
     void update() {
+        USER_EXAMPLE.setId(123123123L);
         when(repository.findById(USER_EXAMPLE.getId())).thenReturn(Optional.ofNullable(USER_EXAMPLE));
         service.update(USER_EXAMPLE);
         verify(repository).save(USER_EXAMPLE);
         USER_EXAMPLE.setId(135487L);
-        assertThrows(DogUserNotFoundException.class, () -> {
+        assertThrows(CatUserNotFoundException.class, () -> {
             service.update(USER_EXAMPLE);
-        }, "Владелец собаки не найден");
+        }, "Владелец кота не найден");
         USER_EXAMPLE.setId(null);
-        assertThrows(DogUserNotFoundException.class, () -> {
+        assertThrows(CatUserNotFoundException.class, () -> {
             service.update(USER_EXAMPLE);
-        }, "Владелец собаки не найден");
+        }, "Владелец кота не найден");
 
     }
 
@@ -70,7 +70,7 @@ class DogUsersServiceTest {
 
     @Test
     void getAll() {
-        List<DogUsers> users = new ArrayList<>();
+        List<CatUsers> users = new ArrayList<>();
         users.add(USER_EXAMPLE);
         when(repository.findAll()).thenReturn(users);
         assertEquals(users, service.getAll());
@@ -79,9 +79,9 @@ class DogUsersServiceTest {
 
     @Test
     void getByChatId() {
-        Set<DogUsers> users = new HashSet<>();
+        Set<CatUsers> users = new HashSet<>();
         users.add(USER_EXAMPLE);
-        when(repository.findByChatId(131313L)).thenReturn(users);
-        assertEquals(users, service.getByChatId(131313L));
+        when(repository.findByChatId(USER_EXAMPLE.getChatId())).thenReturn(users);
+        assertEquals(users, service.getByChatId(USER_EXAMPLE.getChatId()));
     }
 }

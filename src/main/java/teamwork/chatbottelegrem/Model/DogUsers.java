@@ -38,6 +38,7 @@ public class DogUsers {
     public DogUsers(String name, String phone, Long chatId) {
         this.name = name;
         this.number = phone;
+        this.chatId = chatId;
     }
 
     public void setChatId(long chatId) {
