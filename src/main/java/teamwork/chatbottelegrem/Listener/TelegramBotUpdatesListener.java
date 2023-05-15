@@ -206,14 +206,14 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
                         if (context.getShelterType().equals(ButtonCommand.CAT.getCommand())) {
                             sendResponseMessage(chatId,
                                     """
-                                      - Рацион животного: 
+                                      - Рацион животного:
                                       - Общее самочувствие и привыкание к новому месту:
                                       - Изменение в поведении: отказ от старых привычек, приобретение новых:
                                         """);
                         } else if (context.getShelterType().equals(ButtonCommand.DOG.getCommand())) {
                             sendResponseMessage(chatId,
                                     """
-                                       - Рацион животного: 
+                                       - Рацион животного:
                                        - Общее самочувствие и привыкание к новому месту:
                                        - Изменение в поведении: отказ от старых привычек, приобретение новых:
                                         """);
