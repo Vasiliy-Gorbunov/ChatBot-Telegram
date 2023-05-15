@@ -4,6 +4,13 @@
     "chat": {
       "id": 123
     },
-    "text": "%text%"
+    "text": "%text%",
+    "photo": [{
+      "file_id": 1,
+      "file_unique_id": 100,
+      "width": 200,
+      "height": 300,
+      "file_size": 1000
+    }]
   }
 }
