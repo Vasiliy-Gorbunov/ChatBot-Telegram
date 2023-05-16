@@ -5,6 +5,7 @@ import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.ForwardMessage;
 import com.pengrad.telegrambot.request.SendMessage;
+import com.pengrad.telegrambot.response.GetFileResponse;
 import com.pengrad.telegrambot.response.SendResponse;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -17,10 +18,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Value;
 import teamwork.chatbottelegrem.Model.CatUsers;
 import teamwork.chatbottelegrem.Model.Context;
-import teamwork.chatbottelegrem.Model.DogReport;
 import teamwork.chatbottelegrem.Model.DogUsers;
 import teamwork.chatbottelegrem.botInterface.KeyBoard;
 import teamwork.chatbottelegrem.repository.CatReportRepository;
+import teamwork.chatbottelegrem.repository.DogReportRepository;
 import teamwork.chatbottelegrem.service.*;
 
 import java.io.IOException;
@@ -46,11 +47,9 @@ public class TelegramBotUpdatesListenerTest {
     @Mock
     private KeyBoard keyBoard;
     @Mock
-    private CatReportService catReportService;
+    private CatReportRepository catReportRepository;
     @Mock
-    CatReportRepository catReportRepository;
-    @Mock
-    private DogReportService dogReportService;
+    private DogReportRepository dogReportRepository;
     @Mock
     private CatUsersService catUsersService;
     @Mock
@@ -408,21 +407,51 @@ public class TelegramBotUpdatesListenerTest {
                                         """);
     }
 
-//    @Test
-//    public void buttonSendPetReportCatTest() throws URISyntaxException, IOException {
-//        String command = SEND_PET_REPORT.getCommand();
-//        Update update = returnUpdateByCommand(command);
-//        Long chatId = update.message().chat().id();
-//        Context context = new Context(chatId, command);
-//        context.setShelterType(CAT.getCommand());
-//
-//        when(contextService.getByChatId(chatId)).thenReturn(Optional.of(context));
-//
-//        telegramBotUpdatesListener.process(Collections.singletonList(update));
-//
-//        Mockito.verify(catReportService, times(1)).save(update);
-//
-//    }
+    @Test
+    public void buttonSendPetReportCatTest() throws URISyntaxException, IOException {
+        String command = SEND_PET_REPORT.getCommand();
+        Update update = returnUpdateByCommand(command);
+        Long chatId = update.message().chat().id();
+        Context context = new Context(chatId, command);
+        context.setShelterType(CAT.getCommand());
+
+        GetFileResponse getFileResponse = BotUtils.fromJson("""
+                {
+                    "ok": true
+                }
+                """, GetFileResponse.class);
+
+        when(telegramBot.execute(any())).thenReturn(getFileResponse);
+        when(contextService.getByChatId(chatId)).thenReturn(Optional.of(context));
+
+        telegramBotUpdatesListener.process(Collections.singletonList(update));
+
+        Mockito.verify(catReportRepository, times(1)).save(any());
+
+    }
+
+    @Test
+    public void buttonSendPetReportDogTest() throws URISyntaxException, IOException {
+        String command = SEND_PET_REPORT.getCommand();
+        Update update = returnUpdateByCommand(command);
+        Long chatId = update.message().chat().id();
+        Context context = new Context(chatId, command);
+        context.setShelterType(DOG.getCommand());
+
+        GetFileResponse getFileResponse = BotUtils.fromJson("""
+                {
+                    "ok": true
+                }
+                """, GetFileResponse.class);
+
+        when(telegramBot.execute(any())).thenReturn(getFileResponse);
+        when(contextService.getByChatId(chatId)).thenReturn(Optional.of(context));
+
+        telegramBotUpdatesListener.process(Collections.singletonList(update));
+
+        Mockito.verify(dogReportRepository, times(1)).save(any());
+
+    }
 
 
     private Update returnUpdateByCommand(String command) throws URISyntaxException, IOException {
