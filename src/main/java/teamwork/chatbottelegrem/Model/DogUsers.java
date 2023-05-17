@@ -2,10 +2,7 @@ package teamwork.chatbottelegrem.Model;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
-
 import javax.persistence.*;
-import java.util.Objects;
 
 /**
  * Класс владельца собаки
@@ -39,14 +36,5 @@ public class DogUsers {
         this.name = name;
         this.number = phone;
         this.chatId = chatId;
-    }
-
-    public void setChatId(long chatId) {
-    }
-
-    public void setPhone(String phoneNumber) {
-    }
-
-    public void setName(String firstName) {
     }
 }
