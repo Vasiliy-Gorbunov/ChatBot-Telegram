@@ -6,7 +6,8 @@
       "id": 123
     },
     "text": "%text%",
-    "photo": [{
+    "photo": [
+      {
       "file_id": 1,
       "file_unique_id": 100,
       "width": 200,
@@ -34,6 +35,12 @@
         "height": 600,
         "file_size": 4000
       }
-    ]
+    ],
+    "contact": {
+      "phone_number": "88005553535",
+      "first_name": "Johnny",
+      "last_name": "BeGood",
+      "user_id": 555035
+    }
   }
 }

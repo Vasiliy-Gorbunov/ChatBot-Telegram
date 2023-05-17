@@ -69,7 +69,7 @@ public class TelegramBotUpdatesListenerTest {
 
         telegramBotUpdatesListener.process(Collections.singletonList(update));
 
-        argumentCaptor(update.message().chat().id(),
+        argumentCaptorSendMessage(update.message().chat().id(),
                 "Привет! Я могу показать информацию о приютах, " +
                         "как взять животное из приюта и принять отчет о питомце");
     }
@@ -90,7 +90,7 @@ public class TelegramBotUpdatesListenerTest {
 
         telegramBotUpdatesListener.process(Collections.singletonList(update));
 
-        argumentCaptor(chatId, "Вы выбрали кошачий приют.");
+        argumentCaptorSendMessage(chatId, "Вы выбрали кошачий приют.");
 
         Mockito.verify(contextService, times(1)).saveContext(context);
         Mockito.verify(keyBoard, times(1)).shelterMainMenu(chatId);
@@ -133,7 +133,7 @@ public class TelegramBotUpdatesListenerTest {
 
         telegramBotUpdatesListener.process(Collections.singletonList(update));
 
-        argumentCaptor(chatId, "Вы выбрали собачий приют.");
+        argumentCaptorSendMessage(chatId, "Вы выбрали собачий приют.");
 
         Mockito.verify(contextService, times(1)).saveContext(context);
         Mockito.verify(keyBoard, times(1)).shelterMainMenu(chatId);
@@ -188,7 +188,7 @@ public class TelegramBotUpdatesListenerTest {
 
         telegramBotUpdatesListener.process(Collections.singletonList(update));
 
-        argumentCaptor(chatId, """
+        argumentCaptorSendMessage(chatId, """
                 Информация о кошачем приюте - ...
                 Рекомендации о технике безопасности на территории кошачего приюта - ...
                 Контактные данные охраны - ...
@@ -209,7 +209,7 @@ public class TelegramBotUpdatesListenerTest {
 
         telegramBotUpdatesListener.process(Collections.singletonList(update));
 
-        argumentCaptor(chatId, """
+        argumentCaptorSendMessage(chatId, """
                 Информация о собачем приюте - ...
                 Рекомендации о технике безопасности на территории собачего приюта - ...
                 Контактные данные охраны - ...
@@ -230,7 +230,7 @@ public class TelegramBotUpdatesListenerTest {
 
         telegramBotUpdatesListener.process(Collections.singletonList(update));
 
-        argumentCaptor(chatId, """
+        argumentCaptorSendMessage(chatId, """
                 Адрес кошачего приюта - ...
                 График работы - ...
                 """);
@@ -250,7 +250,7 @@ public class TelegramBotUpdatesListenerTest {
 
         telegramBotUpdatesListener.process(Collections.singletonList(update));
 
-        argumentCaptor(chatId, """
+        argumentCaptorSendMessage(chatId, """
                 Адрес собачьего приюта - ...
                 График работы - ...
                 """);
@@ -268,15 +268,8 @@ public class TelegramBotUpdatesListenerTest {
 
         telegramBotUpdatesListener.process(Collections.singletonList(update));
 
-        argumentCaptor(chatId, "Мы передали ваше сообщение волонтеру.");
-
-        ArgumentCaptor<ForwardMessage> argumentCaptor = ArgumentCaptor.forClass(ForwardMessage.class);
-        Mockito.verify(telegramBot).execute(argumentCaptor.capture());
-        ForwardMessage actual = argumentCaptor.getValue();
-
-        org.assertj.core.api.Assertions.assertThat(actual.getParameters().get("chat_id")).isEqualTo(volunteerChatId);
-        org.assertj.core.api.Assertions.assertThat(actual.getParameters().get("from_chat_id")).isEqualTo(chatId);
-        org.assertj.core.api.Assertions.assertThat(actual.getParameters().get("message_id")).isEqualTo(messageId);
+        argumentCaptorSendMessage(chatId, "Мы передали ваше сообщение волонтеру.");
+        argumentCaptorForwardMessage(chatId, messageId);
     }
 
     @Test
@@ -300,11 +293,11 @@ public class TelegramBotUpdatesListenerTest {
 
         telegramBotUpdatesListener.process(Collections.singletonList(update));
 
-        argumentCaptor(chatId, """
-                                    Правила знакомства с животным - ...
-                                    Список рекомендаций - ...
-                                    Список причин отказа в выдаче животного - ...
-                                    """);
+        argumentCaptorSendMessage(chatId, """
+                Правила знакомства с животным - ...
+                Список рекомендаций - ...
+                Список причин отказа в выдаче животного - ...
+                """);
     }
 
     @Test
@@ -321,13 +314,13 @@ public class TelegramBotUpdatesListenerTest {
 
         telegramBotUpdatesListener.process(Collections.singletonList(update));
 
-        argumentCaptor(chatId, """
-                                    Правила знакомства с животным - ...
-                                    Список рекомендаций - ...
-                                    Советы кинолога по первичному общению с собакой - ...
-                                    Рекомендации по проверенным кинологам для дальнейшего обращения к ним
-                                    Список причин отказа в выдаче животного - ...
-                                    """);
+        argumentCaptorSendMessage(chatId, """
+                Правила знакомства с животным - ...
+                Список рекомендаций - ...
+                Советы кинолога по первичному общению с собакой - ...
+                Рекомендации по проверенным кинологам для дальнейшего обращения к ним
+                Список причин отказа в выдаче животного - ...
+                """);
     }
 
 
@@ -345,7 +338,7 @@ public class TelegramBotUpdatesListenerTest {
 
         telegramBotUpdatesListener.process(Collections.singletonList(update));
 
-        argumentCaptor(chatId, "Для взятия кота из приюта необходимы такие документы: ...");
+        argumentCaptorSendMessage(chatId, "Для взятия кота из приюта необходимы такие документы: ...");
     }
 
     @Test
@@ -362,7 +355,7 @@ public class TelegramBotUpdatesListenerTest {
 
         telegramBotUpdatesListener.process(Collections.singletonList(update));
 
-        argumentCaptor(chatId, "Для взятия собаки из приюта необходимы такие документы: ...");
+        argumentCaptorSendMessage(chatId, "Для взятия собаки из приюта необходимы такие документы: ...");
     }
 
     @Test
@@ -379,11 +372,11 @@ public class TelegramBotUpdatesListenerTest {
 
         telegramBotUpdatesListener.process(Collections.singletonList(update));
 
-        argumentCaptor(chatId, """
-                                      - Рацион животного:
-                                      - Общее самочувствие и привыкание к новому месту:
-                                      - Изменение в поведении: отказ от старых привычек, приобретение новых:
-                                        """);
+        argumentCaptorSendMessage(chatId, """
+                - Рацион животного:
+                - Общее самочувствие и привыкание к новому месту:
+                - Изменение в поведении: отказ от старых привычек, приобретение новых:
+                  """);
     }
 
     @Test
@@ -400,11 +393,11 @@ public class TelegramBotUpdatesListenerTest {
 
         telegramBotUpdatesListener.process(Collections.singletonList(update));
 
-        argumentCaptor(chatId, """
-                                       - Рацион животного:
-                                       - Общее самочувствие и привыкание к новому месту:
-                                       - Изменение в поведении: отказ от старых привычек, приобретение новых:
-                                        """);
+        argumentCaptorSendMessage(chatId, """
+                - Рацион животного:
+                - Общее самочувствие и привыкание к новому месту:
+                - Изменение в поведении: отказ от старых привычек, приобретение новых:
+                 """);
     }
 
     @Test
@@ -453,6 +446,132 @@ public class TelegramBotUpdatesListenerTest {
 
     }
 
+    @Test
+    public void buttonBadReportNotificationTest() throws URISyntaxException, IOException {
+        String command = BAD_REPORT_NOTIFICATION.getCommand();
+        Update update = returnUpdateByCommand(command);
+        SendResponse sendResponse = returnSendResponseIsOk();
+        Long chatId = update.message().chat().id();
+
+        when(telegramBot.execute(any())).thenReturn(sendResponse);
+
+        telegramBotUpdatesListener.process(Collections.singletonList(update));
+
+        argumentCaptorSendMessage(chatId, "Дорогой усыновитель, мы заметили, что ты заполняешь отчет не так подробно, как необходимо. " +
+                "Пожалуйста, подойди ответственнее к этому занятию. " +
+                "В противном случае волонтеры приюта будут обязаны самолично проверять условия содержания животного");
+    }
+
+    @Test
+    public void buttonSuccessCongratulationTest() throws URISyntaxException, IOException {
+        String command = SUCCESS_CONGRATULATION.getCommand();
+        Update update = returnUpdateByCommand(command);
+        SendResponse sendResponse = returnSendResponseIsOk();
+        Long chatId = update.message().chat().id();
+
+        when(telegramBot.execute(any())).thenReturn(sendResponse);
+
+        telegramBotUpdatesListener.process(Collections.singletonList(update));
+
+        argumentCaptorSendMessage(chatId, "Поздравляем! Вы успешно прошли испытательный срок.");
+    }
+
+    @Test
+    public void buttonAdditionalPeriod14Test() throws URISyntaxException, IOException {
+        String command = ADDITIONAL_PERIOD_14.getCommand();
+        Update update = returnUpdateByCommand(command);
+        SendResponse sendResponse = returnSendResponseIsOk();
+        Long chatId = update.message().chat().id();
+
+        when(telegramBot.execute(any())).thenReturn(sendResponse);
+
+        telegramBotUpdatesListener.process(Collections.singletonList(update));
+
+        argumentCaptorSendMessage(chatId, "Вам дополнительно назначено 14 календарных дней испытательного срока");
+    }
+
+    @Test
+    public void buttonAdditionalPeriod30Test() throws URISyntaxException, IOException {
+        String command = ADDITIONAL_PERIOD_30.getCommand();
+        Update update = returnUpdateByCommand(command);
+        SendResponse sendResponse = returnSendResponseIsOk();
+        Long chatId = update.message().chat().id();
+
+        when(telegramBot.execute(any())).thenReturn(sendResponse);
+
+        telegramBotUpdatesListener.process(Collections.singletonList(update));
+
+        argumentCaptorSendMessage(chatId, "Вам дополнительно назначено 30 календарных дней испытательного срока");
+    }
+
+    @Test
+    public void buttonAdoptionRefuseTest() throws URISyntaxException, IOException {
+        String command = ADOPTION_REFUSE.getCommand();
+        Update update = returnUpdateByCommand(command);
+        SendResponse sendResponse = returnSendResponseIsOk();
+        Long chatId = update.message().chat().id();
+
+        when(telegramBot.execute(any())).thenReturn(sendResponse);
+
+        telegramBotUpdatesListener.process(Collections.singletonList(update));
+
+        argumentCaptorSendMessage(chatId, "К сожалению, Вы не прошли испытательный срок. " +
+                "Пожалуйста, верните животное в приют в течение двух календарных дней.");
+    }
+
+    @Test
+    public void buttonNullCatTest() throws URISyntaxException, IOException {
+        Update update = returnUpdateByCommand("report");
+        SendResponse sendResponse = returnSendResponseIsOk();
+        Long chatId = update.message().chat().id();
+        Context context = new Context(chatId, new CatUsers());
+        context.setShelterType(CAT.getCommand());
+
+
+        when(telegramBot.execute(any())).thenReturn(sendResponse);
+        when(contextService.getByChatId(chatId)).thenReturn(Optional.of(context));
+
+        telegramBotUpdatesListener.process(Collections.singletonList(update));
+
+        Mockito.verify(catUsersService).update(new CatUsers("Johnny", "88005553535", null));
+        argumentCaptorSendMessage(chatId, "Мы получили ваши контактные данные");
+        argumentCaptorForwardMessage(chatId, update.message().messageId());
+    }
+
+    @Test
+    public void buttonNullDogTest() throws URISyntaxException, IOException {
+        Update update = returnUpdateByCommand("report");
+        SendResponse sendResponse = returnSendResponseIsOk();
+        Long chatId = update.message().chat().id();
+        Context context = new Context(chatId, new DogUsers());
+        context.setShelterType(DOG.getCommand());
+
+
+        when(telegramBot.execute(any())).thenReturn(sendResponse);
+        when(contextService.getByChatId(chatId)).thenReturn(Optional.of(context));
+
+        telegramBotUpdatesListener.process(Collections.singletonList(update));
+
+        Mockito.verify(dogUsersService).update(new DogUsers("Johnny", "88005553535", null));
+        argumentCaptorSendMessage(chatId, "Мы получили ваши контактные данные");
+        argumentCaptorForwardMessage(chatId, update.message().messageId());
+    }
+
+//    @Test
+//    public void updateExceptionTest() throws URISyntaxException, IOException {
+//        Update update = returnUpdateByCommand("report");
+//
+//        doThrow(new Exception()).when(telegramBotUpdatesListener).process(any());
+//
+//        telegramBotUpdatesListener.process(Collections.singletonList(update));
+//
+//
+//
+//    }
+
+
+
+
 
     private Update returnUpdateByCommand(String command) throws URISyntaxException, IOException {
         String json = Files.readString(Path.of(
@@ -468,7 +587,7 @@ public class TelegramBotUpdatesListenerTest {
                 """, SendResponse.class);
     }
 
-    private void argumentCaptor(Long chatId, String text) {
+    private void argumentCaptorSendMessage(Long chatId, String text) {
         ArgumentCaptor<SendMessage> argumentCaptor = ArgumentCaptor.forClass(SendMessage.class);
         Mockito.verify(telegramBot).execute(argumentCaptor.capture());
         SendMessage actual = argumentCaptor.getValue();
@@ -476,6 +595,16 @@ public class TelegramBotUpdatesListenerTest {
         org.assertj.core.api.Assertions.assertThat(actual.getParameters().get("chat_id")).isEqualTo(chatId);
         org.assertj.core.api.Assertions.assertThat(actual.getParameters().get("text")).isEqualTo(
                 text);
+    }
+
+    private void argumentCaptorForwardMessage(Long chatId, Integer messageId) {
+        ArgumentCaptor<ForwardMessage> argumentCaptor = ArgumentCaptor.forClass(ForwardMessage.class);
+        Mockito.verify(telegramBot).execute(argumentCaptor.capture());
+        ForwardMessage actual = argumentCaptor.getValue();
+
+        org.assertj.core.api.Assertions.assertThat(actual.getParameters().get("chat_id")).isEqualTo(volunteerChatId);
+        org.assertj.core.api.Assertions.assertThat(actual.getParameters().get("from_chat_id")).isEqualTo(chatId);
+        org.assertj.core.api.Assertions.assertThat(actual.getParameters().get("message_id")).isEqualTo(messageId);
     }
 
 
