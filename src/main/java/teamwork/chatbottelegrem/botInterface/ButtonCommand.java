@@ -17,7 +17,7 @@ public enum ButtonCommand {
     GET_REPORT_FORM("Получить форму отчета о питомце"),
     SEND_PET_REPORT("Прислать отчет о питомце"),
     BAD_REPORT_NOTIFICATION ("/bad_report_notification"),
-    SUCCESS_CONGRATULATION("success_congratulations"),
+    SUCCESS_CONGRATULATION("/success_congratulations"),
     ADDITIONAL_PERIOD_14("/additional_period_14"),
     ADDITIONAL_PERIOD_30("/additional_period_30"),
     ADOPTION_REFUSE("/adoption_refuse");

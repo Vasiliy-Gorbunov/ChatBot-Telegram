@@ -16,7 +16,6 @@ import java.time.LocalDate;
 
 @Service
 public class DogReportService {
-    private final Logger logger = LoggerFactory.getLogger(DogReportService.class);
     private final DogReportRepository dogReportRepository;
     private final TelegramBot telegramBot;
 
@@ -30,44 +29,22 @@ public class DogReportService {
      * Метод сохранения отчета о собаке в БД
      */
     public void save(Update update) {
-        if (update.message() != null) {
-            Long chatId = update.message().chat().id();
-            PhotoSize photo = update.message().photo()[update.message().photo().length - 1];
-            String text = update.message().text();
-            String fileId = photo.fileId();
+        ReportHandler reportHandler = new ReportHandler(telegramBot);
+        reportHandler.checkReport(update);
 
+        Long chatId = update.message().chat().id();
+        String text = update.message().text();
+        String fileId = update.message()
+                .photo()[update.message().photo().length - 1]
+                .fileId();
 
-            if (dogReportRepository.findByDate(LocalDate.now()) == null
-                    && text != null && !text.isEmpty() && !text.isBlank()
-                || photo != null) {
-                    try {
-                        ReportHandler reportHandler = new ReportHandler(telegramBot);
-                        reportHandler.checkReport(update);
-                        DogReport dogReport = new DogReport();
-                        dogReport.setId(update.updateId());
-                        dogReport.setChatId(chatId);
-                        dogReport.setDate(LocalDate.now());
-                        dogReport.setTextReport(text);
-                        dogReport.setFileId(fileId);
-                        dogReportRepository.save(dogReport);
-                    } catch (ReportDataNotFoundException e) {
-                        logger.error(e.getMessage(), e);
-                    }
-                } else if (dogReportRepository.findByDate(LocalDate.now()) != null
-                    && text != null && !text.isEmpty() && !text.isBlank() || photo != null) {
-
-                DogReport dogReport = dogReportRepository.findByDate(LocalDate.now());
-
-                if (text != null) {
-                        dogReport.setTextReport(text);
-                }
-                if (photo != null) {
-                        dogReport.setFileId(fileId);
-                }
-                dogReportRepository.save(dogReport);
-
-            }
-        }
+        DogReport dogReport = new DogReport();
+        dogReport.setId(update.updateId());
+        dogReport.setChatId(chatId);
+        dogReport.setDate(LocalDate.now());
+        dogReport.setTextReport(text);
+        dogReport.setFileId(fileId);
+        dogReportRepository.save(dogReport);
     }
 }
 

@@ -16,7 +16,7 @@ import java.util.Collection;
  * Сервис класса пользователя собаки
  */
 @Service
-public class DogUsersService {
+public class  DogUsersService {
     private final DogUsersRepository repository;
     private static final Logger logger = LoggerFactory.getLogger(CatUsersRepository.class);
     public DogUsersService(DogUsersRepository repository) {
