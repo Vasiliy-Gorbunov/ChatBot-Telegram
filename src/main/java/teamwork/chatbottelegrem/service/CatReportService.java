@@ -1,14 +1,11 @@
+
 package teamwork.chatbottelegrem.service;
 
 import com.pengrad.telegrambot.TelegramBot;
-import com.pengrad.telegrambot.model.PhotoSize;
 import com.pengrad.telegrambot.model.Update;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import teamwork.chatbottelegrem.Model.CatReport;
-import teamwork.chatbottelegrem.exception.ReportDataNotFoundException;
 import teamwork.chatbottelegrem.repository.CatReportRepository;
 
 import java.time.LocalDate;
@@ -16,8 +13,7 @@ import java.time.LocalDate;
 
 @Service
 public class CatReportService {
-    private final Logger logger = LoggerFactory.getLogger(CatReportService.class);
-    private final CatReportRepository  catReportRepository;
+    private final CatReportRepository catReportRepository;
     private final TelegramBot telegramBot;
 
 
@@ -28,46 +24,32 @@ public class CatReportService {
 
 
     /**
-     * Метод сохранения отчета о коте в БД
+     * Метод сохранения отчета о коте в базе данных
      */
+
     public void save(Update update) {
-        if (update.message() != null) {
-            Long chatId = update.message().chat().id();
-            PhotoSize photo = update.message().photo()[update.message().photo().length - 1];
-            String text = update.message().text();
-            String fileId = photo.fileId();
+        ReportHandler reportHandler = new ReportHandler(telegramBot);
+        reportHandler.checkReport(update);
+        catReportRepository.save(catReportFromUpdate(update));
+    }
 
 
-            if (catReportRepository.findByDate(LocalDate.now()) == null
-                    && text != null && !text.isEmpty() && !text.isBlank() || photo != null) {
-                try {
-                    ReportHandler reportHandler = new ReportHandler(telegramBot);
-                    reportHandler.checkReport(update);
-                    CatReport catReport = new CatReport();
-                    catReport.setId(update.updateId());
-                    catReport.setChatId(chatId);
-                    catReport.setDate(LocalDate.now());
-                    catReport.setTextReport(text);
-                    catReport.setFileId(fileId);
-                    catReportRepository.save(catReport);
-                } catch (ReportDataNotFoundException e) {
-                    logger.error(e.getMessage(), e);
-                }
+    /**
+     * Метод создания отчета коте на основе данных Update
+     */
+    public CatReport catReportFromUpdate(Update update) {
+        Long chatId = update.message().chat().id();
+        String text = update.message().text();
+        String fileId = update.message()
+                .photo()[update.message().photo().length - 1]
+                .fileId();
 
-            } else if (catReportRepository.findByDate(LocalDate.now()) != null
-                    && text != null && !text.isEmpty() && !text.isBlank() || photo != null) {
-
-                CatReport catReport = catReportRepository.findByDate(LocalDate.now());
-
-                if (text != null) {
-                    catReport.setTextReport(text);
-                }
-                if (photo != null) {
-                    catReport.setFileId(fileId);
-                }
-                catReportRepository.save(catReport);
-            }
-        }
+        CatReport catReport = new CatReport();
+        catReport.setId(update.updateId());
+        catReport.setChatId(chatId);
+        catReport.setDate(LocalDate.now());
+        catReport.setTextReport(text);
+        catReport.setFileId(fileId);
+        return catReport;
     }
 }
-
