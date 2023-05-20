@@ -1,0 +1,20 @@
+{
+  "message": {
+    "message_id": 123,
+    "chat":{
+      "id": 1233
+    },
+    "text": "%text%",
+    "photo": [{
+      "serialVersionUID": 9,
+      "file_id": "15",
+      "file_unique_id": "15",
+      "width": 20,
+      "height": 70,
+      "file_size": 200
+
+    }]
+  }
+
+
+}

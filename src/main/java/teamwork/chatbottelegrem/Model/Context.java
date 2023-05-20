@@ -26,6 +26,16 @@ public class Context {
         this.shelterType = shelterType;
     }
 
+    public Context(Long chatId, CatUsers catUsers) {
+        this.chatId = chatId;
+        this.catUser = catUsers;
+    }
+
+    public Context(Long chatId, DogUsers dogUsers) {
+        this.chatId = chatId;
+        this.dogUser = dogUsers;
+    }
+
     public void setCatUsers(CatUsers catUsers) {
     }
 
@@ -33,10 +43,10 @@ public class Context {
     }
 
     public CatUsers getCatUsers() {
-        return null;
+        return catUser;
     }
 
     public DogUsers getDogUsers() {
-        return null;
+        return dogUser;
     }
 }

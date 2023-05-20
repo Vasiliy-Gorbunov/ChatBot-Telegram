@@ -1,0 +1,46 @@
+{
+  "update_id": 1,
+  "message": {
+    "message_id": 123,
+    "chat": {
+      "id": 123
+    },
+    "text": "%text%",
+    "photo": [
+      {
+      "file_id": 1,
+      "file_unique_id": 100,
+      "width": 200,
+      "height": 300,
+      "file_size": 1000
+    },
+      {
+        "file_id": 2,
+        "file_unique_id": 101,
+        "width": 300,
+        "height": 400,
+        "file_size": 2000
+      },
+      {
+        "file_id": 3,
+        "file_unique_id": 102,
+        "width": 400,
+        "height": 500,
+        "file_size": 3000
+      },
+      {
+        "file_id": 4,
+        "file_unique_id": 103,
+        "width": 500,
+        "height": 600,
+        "file_size": 4000
+      }
+    ],
+    "contact": {
+      "phone_number": "88005553535",
+      "first_name": "Johnny",
+      "last_name": "BeGood",
+      "user_id": 555035
+    }
+  }
+}

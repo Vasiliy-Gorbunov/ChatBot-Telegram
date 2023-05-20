@@ -2,10 +2,15 @@
 package teamwork.chatbottelegrem.service;
 
 import com.pengrad.telegrambot.TelegramBot;
+import com.pengrad.telegrambot.model.PhotoSize;
 import com.pengrad.telegrambot.model.Update;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import teamwork.chatbottelegrem.Model.CatReport;
+import teamwork.chatbottelegrem.exception.ReportDataNotFoundException;
+
 import teamwork.chatbottelegrem.repository.CatReportRepository;
 
 import java.time.LocalDate;
@@ -13,7 +18,11 @@ import java.time.LocalDate;
 
 @Service
 public class CatReportService {
-    private final CatReportRepository catReportRepository;
+
+
+    private final Logger logger = LoggerFactory.getLogger(CatReportService.class);
+    private final CatReportRepository  catReportRepository;
+
     private final TelegramBot telegramBot;
 
 
@@ -24,6 +33,7 @@ public class CatReportService {
 
 
     /**
+
      * Метод сохранения отчета о коте в базе данных
      */
 
@@ -53,3 +63,5 @@ public class CatReportService {
         return catReport;
     }
 }
+
+

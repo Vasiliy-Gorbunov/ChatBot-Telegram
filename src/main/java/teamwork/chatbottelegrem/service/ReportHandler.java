@@ -12,6 +12,7 @@ import com.pengrad.telegrambot.response.SendResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
+
 import org.springframework.util.StringUtils;
 import teamwork.chatbottelegrem.exception.ReportDataNotFoundException;
 
@@ -21,10 +22,12 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.UUID;
 
+
 @Component
 public class ReportHandler {
     private final Logger logger = LoggerFactory.getLogger(ReportHandler.class);
     private final TelegramBot telegramBot;
+
     public ReportHandler(TelegramBot telegramBot) {
         this.telegramBot = telegramBot;
     }
@@ -32,6 +35,7 @@ public class ReportHandler {
     /**
      * Метод проверки полноты отчета
      */
+
 
     public void checkReport(Update update) {
         try {
@@ -68,9 +72,10 @@ public class ReportHandler {
                         Files.write(Paths.get(UUID.randomUUID() + "." + extension), image);
                     } catch (IOException e) {
                         throw new RuntimeException(e);
-                    }
+
                 }
             }
         }
-    }
+
 }
+

@@ -23,6 +23,8 @@ public class CatUsers {
     private int yearOfBirth;
     @Column(name = "number")
     private String number;
+    @Column(name = "chat_id")
+    private Long chatId;
     @JsonBackReference
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cat_id")
@@ -31,17 +33,10 @@ public class CatUsers {
     public CatUsers() {
     }
     //конструктор класса с полями name, phone, chatId.
+
     public CatUsers(String name, String phone, Long chatId) {
         this.name = name;
         this.number = phone;
-    }
-
-    public void setChatId(long chatId) {
-    }
-
-    public void setPhone(String phoneNumber) {
-    }
-
-    public void setName(String firstName) {
+        this.chatId = chatId;
     }
 }
