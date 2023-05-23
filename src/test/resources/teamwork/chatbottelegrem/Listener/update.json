@@ -6,6 +6,7 @@
       "id": 123
     },
     "text": "%text%",
+    "caption": "caption",
     "photo": [
       {
       "file_id": 1,
