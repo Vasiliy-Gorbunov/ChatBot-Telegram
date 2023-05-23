@@ -41,13 +41,13 @@ public class ReportHandler {
         try {
             Message message = update.message();
             Long id = update.message().chat().id();
-            String text = update.message().caption();
+            String text = update.message().text();
             PhotoSize photo = update.message().photo()[update.message().photo().length - 1];
         } catch (ReportDataNotFoundException e) {
             logger.error(e.getMessage(), e);
         } finally {
-            if (update.message() != null && (update.message().caption() == null || update.message().caption().isEmpty()
-                    || update.message().caption().isBlank())) {
+            if (update.message() != null && (update.message().text() == null || update.message().text().isEmpty()
+                    || update.message().text().isBlank())) {
                 SendMessage sendMessage = new SendMessage(update.message().chat().id(), "Пожалуйста, направьте текстовый отчет о питомце");
                 SendResponse sendResponse = telegramBot.execute(sendMessage);
                 if (!sendResponse.isOk()) {
