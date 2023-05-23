@@ -40,7 +40,7 @@ public class ReportHandler {
     public void checkReport(Update update) {
         try {
             Message message = update.message();
-            Long id= update.message().chat().id();
+            Long id = update.message().chat().id();
             String text = update.message().text();
             PhotoSize photo = update.message().photo()[update.message().photo().length - 1];
         } catch (ReportDataNotFoundException e) {
@@ -55,7 +55,7 @@ public class ReportHandler {
                 }
             }
 
-            if (update.message()  != null && update.message().photo()[update.message().photo().length - 1] == null) {
+            if (update.message() != null && update.message().photo()[update.message().photo().length - 1] == null) {
                 SendMessage sendMessage = new SendMessage(update.message().chat().id(), "Пожалуйста, направьте фото питомца");
                 SendResponse sendResponse = telegramBot.execute(sendMessage);
                 if (!sendResponse.isOk()) {
@@ -73,9 +73,10 @@ public class ReportHandler {
                     } catch (IOException e) {
                         throw new RuntimeException(e);
 
+                    }
                 }
             }
         }
-
+    }
 }
 
