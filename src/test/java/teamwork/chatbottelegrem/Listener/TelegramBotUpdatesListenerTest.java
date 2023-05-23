@@ -20,15 +20,19 @@ import org.springframework.beans.factory.annotation.Value;
 import teamwork.chatbottelegrem.Model.CatUsers;
 import teamwork.chatbottelegrem.Model.Context;
 import teamwork.chatbottelegrem.Model.DogUsers;
+import teamwork.chatbottelegrem.Model.ReportMessage;
 import teamwork.chatbottelegrem.botInterface.KeyBoard;
 import teamwork.chatbottelegrem.repository.CatReportRepository;
+import teamwork.chatbottelegrem.repository.ContextRepository;
 import teamwork.chatbottelegrem.repository.DogReportRepository;
+import teamwork.chatbottelegrem.repository.ReportMessageRepository;
 import teamwork.chatbottelegrem.service.*;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -51,6 +55,10 @@ public class TelegramBotUpdatesListenerTest {
     private CatReportRepository catReportRepository;
     @Mock
     private DogReportRepository dogReportRepository;
+    @Mock
+    private ContextRepository contextRepository;
+    @Mock
+    private ReportMessageRepository reportMessageRepository;
     @Mock
     private CatUsersService catUsersService;
     @Mock
@@ -579,6 +587,21 @@ public class TelegramBotUpdatesListenerTest {
     }
 
     @Test
+    public void sendWarning() {
+        List<Context> contextList = new ArrayList<>();
+        contextList.add(new Context(123L, new CatUsers("John", "88005553535", 123L)));
+        List<ReportMessage> reportMessageList = new ArrayList<>();
+        reportMessageList.add(new ReportMessage(123L, new Date(2023-5-19)));
+        reportMessageList.add(new ReportMessage(123L, new Date(2023-5-20)));
+        reportMessageList.add(new ReportMessage(123L, new Date(2023-5-21)));
+        reportMessageList.add(new ReportMessage(123L, new Date(2023-5-22)));
+
+        when(contextRepository.findAll()).thenReturn(contextList);
+        when(reportMessageRepository.findAll()).thenReturn(reportMessageList);
+
+    }
+
+    @Test
     public void sendResponseIsNotOkTest() throws URISyntaxException, IOException {
         Update update = returnUpdateByCommand(START.getCommand());
         SendResponse sendResponse = BotUtils.fromJson("""
@@ -628,6 +651,5 @@ public class TelegramBotUpdatesListenerTest {
         org.assertj.core.api.Assertions.assertThat(actual.getParameters().get("from_chat_id")).isEqualTo(chatId);
         org.assertj.core.api.Assertions.assertThat(actual.getParameters().get("message_id")).isEqualTo(messageId);
     }
-
 
 }

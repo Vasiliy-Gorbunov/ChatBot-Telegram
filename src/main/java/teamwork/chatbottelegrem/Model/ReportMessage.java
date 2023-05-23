@@ -28,5 +28,10 @@ public class ReportMessage {
     private Date lastMessage;
     @Lob
     private byte[] data;
+
+    public ReportMessage(Long chatId, Date lastMessage) {
+        this.chatId = chatId;
+        this.lastMessage = lastMessage;
+    }
 }
 
