@@ -46,7 +46,7 @@ public class DogReportService {
      */
     public DogReport dogReportFromUpdate(Update update) {
         Long chatId = update.message().chat().id();
-        String text = update.message().text();
+        String text = update.message().caption();
         String fileId = update.message()
                 .photo()[update.message().photo().length - 1]
                 .fileId();
