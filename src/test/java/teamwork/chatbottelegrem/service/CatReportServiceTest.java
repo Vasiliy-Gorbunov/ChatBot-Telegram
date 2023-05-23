@@ -3,6 +3,7 @@ package teamwork.chatbottelegrem.service;
 import com.pengrad.telegrambot.BotUtils;
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.model.Update;
+import com.pengrad.telegrambot.response.GetFileResponse;
 import com.pengrad.telegrambot.response.SendResponse;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -44,11 +45,11 @@ public class CatReportServiceTest {
     public void catReportSaveTest () throws URISyntaxException, IOException {
         String json = Files.readString(Path.of(CatReportServiceTest.class.getResource("update.json").toURI()));
         Update update = BotUtils.fromJson(json, Update.class);
-        SendResponse sendResponse = BotUtils.fromJson("""
+        GetFileResponse sendResponse = BotUtils.fromJson("""
             {
             "ok": true
             }
-            """, SendResponse.class);
+            """, GetFileResponse.class);
 
         when(telegramBot.execute(any())).thenReturn(sendResponse);
         CatReport catReport = catReportService.catReportFromUpdate(update);
