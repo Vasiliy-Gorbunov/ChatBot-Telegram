@@ -15,6 +15,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import teamwork.chatbottelegrem.Model.CatUsers;
 import teamwork.chatbottelegrem.Model.Context;
@@ -54,6 +55,8 @@ public class TelegramBotUpdatesListenerTest {
     private CatUsersService catUsersService;
     @Mock
     private DogUsersService dogUsersService;
+    @Mock
+    private Logger logger;
 
     @InjectMocks
     private TelegramBotUpdatesListener telegramBotUpdatesListener;
@@ -407,14 +410,23 @@ public class TelegramBotUpdatesListenerTest {
         Long chatId = update.message().chat().id();
         Context context = new Context(chatId, command);
         context.setShelterType(CAT.getCommand());
+        byte[] testPhoto = Files.readAllBytes(Path.of(TelegramBotUpdatesListenerTest.class.getResource("foto.jpeg").toURI()));
 
         GetFileResponse getFileResponse = BotUtils.fromJson("""
                 {
+                    "result":
+                    {
+                        "file_id": "001",
+                        "file_unique_id": "002",
+                        "file_size": 157170,
+                        "file_path": "photo.jpeg"
+                    },
                     "ok": true
                 }
                 """, GetFileResponse.class);
 
         when(telegramBot.execute(any())).thenReturn(getFileResponse);
+        when(telegramBot.getFileContent(any())).thenReturn(testPhoto);
         when(contextService.getByChatId(chatId)).thenReturn(Optional.of(context));
 
         telegramBotUpdatesListener.process(Collections.singletonList(update));
@@ -430,14 +442,23 @@ public class TelegramBotUpdatesListenerTest {
         Long chatId = update.message().chat().id();
         Context context = new Context(chatId, command);
         context.setShelterType(DOG.getCommand());
+        byte[] testPhoto = Files.readAllBytes(Path.of(TelegramBotUpdatesListenerTest.class.getResource("foto.jpeg").toURI()));
 
         GetFileResponse getFileResponse = BotUtils.fromJson("""
                 {
+                    "result":
+                    {
+                        "file_id": "001",
+                        "file_unique_id": "002",
+                        "file_size": 157170,
+                        "file_path": "photo.jpeg"
+                    },
                     "ok": true
                 }
                 """, GetFileResponse.class);
 
         when(telegramBot.execute(any())).thenReturn(getFileResponse);
+        when(telegramBot.getFileContent(any())).thenReturn(testPhoto);
         when(contextService.getByChatId(chatId)).thenReturn(Optional.of(context));
 
         telegramBotUpdatesListener.process(Collections.singletonList(update));
@@ -557,20 +578,21 @@ public class TelegramBotUpdatesListenerTest {
         argumentCaptorForwardMessage(chatId, update.message().messageId());
     }
 
-//    @Test
-//    public void updateExceptionTest() throws URISyntaxException, IOException {
-//        Update update = returnUpdateByCommand("report");
-//
-//        doThrow(new Exception()).when(telegramBotUpdatesListener).process(any());
-//
-//        telegramBotUpdatesListener.process(Collections.singletonList(update));
-//
-//
-//
-//    }
+    @Test
+    public void sendResponseIsNotOkTest() throws URISyntaxException, IOException {
+        Update update = returnUpdateByCommand(START.getCommand());
+        SendResponse sendResponse = BotUtils.fromJson("""
+                {
+                    "ok": false
+                }
+                """, SendResponse.class);
+
+        when(telegramBot.execute(any())).thenReturn(sendResponse);
+
+        telegramBotUpdatesListener.process(Collections.singletonList(update));
 
 
-
+    }
 
 
     private Update returnUpdateByCommand(String command) throws URISyntaxException, IOException {
