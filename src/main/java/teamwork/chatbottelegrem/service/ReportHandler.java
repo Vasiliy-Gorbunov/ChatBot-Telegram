@@ -41,7 +41,9 @@ public class ReportHandler {
         try {
             Message message = update.message();
             Long id = update.message().chat().id();
+
             String text = update.message().caption();
+
             PhotoSize photo = update.message().photo()[update.message().photo().length - 1];
         } catch (ReportDataNotFoundException e) {
             logger.error(e.getMessage(), e);
