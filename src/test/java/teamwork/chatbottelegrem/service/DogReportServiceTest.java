@@ -66,9 +66,10 @@ import static org.mockito.Mockito.when;
             when(telegramBot.execute(any())).thenReturn(getFileResponse);
             when(telegramBot.getFileContent(any())).thenReturn(testPhoto);
 
-            DogReport dogReport = dogReportService.dogReportFromUpdate(update);
             dogReportService.save(update);
-            verify(dogReportRepository).save((dogReport));
+
+            DogReport dogReport = dogReportService.dogReportFromUpdate(update);
+            verify(dogReportRepository).save(dogReport);
             assertEquals(dogReport.getFileId(), "15");
         }
     }

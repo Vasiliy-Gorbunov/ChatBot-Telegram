@@ -37,6 +37,7 @@ public class DogReportService {
     public void save(Update update) {
         ReportHandler reportHandler = new ReportHandler(telegramBot);
         reportHandler.checkReport(update);
+
         dogReportRepository.save(dogReportFromUpdate(update));
     }
 
@@ -45,20 +46,15 @@ public class DogReportService {
      * Метод создания отчета о собаке на основе данных Update
      */
     public DogReport dogReportFromUpdate(Update update) {
-        Long chatId = update.message().chat().id();
-        String text = update.message().caption();
-        String fileId = update.message()
-                .photo()[update.message().photo().length - 1]
-                .fileId();
-
         DogReport dogReport = new DogReport();
-        dogReport.setChatId(chatId);
+        dogReport.setChatId(update.message().chat().id());
         dogReport.setDate(LocalDate.now());
-        dogReport.setTextReport(text);
-        dogReport.setFileId(fileId);
+        dogReport.setTextReport(update.message().caption());
+        dogReport.setFileId(update.message()
+                .photo()[update.message().photo().length - 1]
+                .fileId());
         return dogReport;
 
     }
-
 }
 

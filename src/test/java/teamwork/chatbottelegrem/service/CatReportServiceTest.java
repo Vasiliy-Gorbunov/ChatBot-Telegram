@@ -10,6 +10,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import teamwork.chatbottelegrem.Listener.TelegramBotUpdatesListenerTest;
 import teamwork.chatbottelegrem.Model.CatReport;
 import teamwork.chatbottelegrem.repository.CatReportRepository;
 
@@ -45,16 +46,29 @@ public class CatReportServiceTest {
     public void catReportSaveTest () throws URISyntaxException, IOException {
         String json = Files.readString(Path.of(CatReportServiceTest.class.getResource("update.json").toURI()));
         Update update = BotUtils.fromJson(json, Update.class);
-        GetFileResponse sendResponse = BotUtils.fromJson("""
-            {
-            "ok": true
-            }
-            """, GetFileResponse.class);
+        byte[] testPhoto = Files.readAllBytes(Path.of(TelegramBotUpdatesListenerTest.class.getResource("foto.jpeg").toURI()));
 
-        when(telegramBot.execute(any())).thenReturn(sendResponse);
-        CatReport catReport = catReportService.catReportFromUpdate(update);
+
+        GetFileResponse getFileResponse = BotUtils.fromJson("""
+                {
+                    "result":
+                    {
+                        "file_id": "001",
+                        "file_unique_id": "002",
+                        "file_size": 157170,
+                        "file_path": "photo.jpeg"
+                    },
+                    "ok": true
+                }
+                """, GetFileResponse.class);
+
+        when(telegramBot.execute(any())).thenReturn(getFileResponse);
+        when(telegramBot.getFileContent(any())).thenReturn(testPhoto);
+
+
         catReportService.save(update);
-        verify(catReportRepository.save((catReport)));
+        CatReport catReport = catReportService.catReportFromUpdate(update);
+        verify(catReportRepository).save(catReport);
         assertEquals(catReport.getFileId(), "15");
     }
 }

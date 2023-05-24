@@ -19,8 +19,6 @@ import java.time.LocalDate;
 @Service
 public class CatReportService {
 
-
-    private final Logger logger = LoggerFactory.getLogger(CatReportService.class);
     private final CatReportRepository  catReportRepository;
 
     private final TelegramBot telegramBot;
@@ -40,6 +38,7 @@ public class CatReportService {
     public void save(Update update) {
         ReportHandler reportHandler = new ReportHandler(telegramBot);
         reportHandler.checkReport(update);
+
         catReportRepository.save(catReportFromUpdate(update));
     }
 
@@ -48,18 +47,14 @@ public class CatReportService {
      * Метод создания отчета коте на основе данных Update
      */
     public CatReport catReportFromUpdate(Update update) {
-        Long chatId = update.message().chat().id();
-        String text = update.message().caption();
-        String fileId = update.message()
-                .photo()[update.message().photo().length - 1]
-                .fileId();
 
         CatReport catReport = new CatReport();
-        catReport.setId(update.updateId());
-        catReport.setChatId(chatId);
+        catReport.setChatId(update.message().chat().id());
         catReport.setDate(LocalDate.now());
-        catReport.setTextReport(text);
-        catReport.setFileId(fileId);
+        catReport.setTextReport(update.message().caption());
+        catReport.setFileId(update.message()
+                .photo()[update.message().photo().length - 1]
+                .fileId());
         return catReport;
     }
 }
