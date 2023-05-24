@@ -20,6 +20,8 @@ import teamwork.chatbottelegrem.exception.ReportDataNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 
@@ -44,7 +46,9 @@ public class ReportHandler {
 
             String text = update.message().caption();
 
-            PhotoSize photo = update.message().photo()[update.message().photo().length - 1];
+            if (update.message().photo() != null) {
+                PhotoSize photo = update.message().photo()[update.message().photo().length - 1];
+            }
         } catch (ReportDataNotFoundException e) {
             logger.error(e.getMessage(), e);
         } finally {
@@ -57,7 +61,7 @@ public class ReportHandler {
                 }
             }
 
-            if (update.message() != null && update.message().photo()[update.message().photo().length - 1] == null) {
+            if (update.message() != null && update.message().photo() == null) {
                 SendMessage sendMessage = new SendMessage(update.message().chat().id(), "Пожалуйста, направьте фото питомца");
                 SendResponse sendResponse = telegramBot.execute(sendMessage);
                 if (!sendResponse.isOk()) {
@@ -71,7 +75,7 @@ public class ReportHandler {
                         String extension = StringUtils.getFilenameExtension(
                                 getFileResponse.file().filePath());
                         byte[] image = telegramBot.getFileContent(getFileResponse.file());
-                        Files.write(Paths.get(UUID.randomUUID() + "." + extension), image);
+                        Files.write(Paths.get(update.message().chat().id()+" "+ LocalDate.now() + "." + extension), image);
                     } catch (IOException e) {
                         throw new RuntimeException(e);
 

@@ -4,7 +4,8 @@
     "chat":{
       "id": 1233
     },
-    "text": "%text%"
+    "caption": "%text%",
+    "text": "text"
 
   }
 

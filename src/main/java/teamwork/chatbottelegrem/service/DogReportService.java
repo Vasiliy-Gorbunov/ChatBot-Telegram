@@ -52,7 +52,6 @@ public class DogReportService {
                 .fileId();
 
         DogReport dogReport = new DogReport();
-        dogReport.setId(update.updateId());
         dogReport.setChatId(chatId);
         dogReport.setDate(LocalDate.now());
         dogReport.setTextReport(text);

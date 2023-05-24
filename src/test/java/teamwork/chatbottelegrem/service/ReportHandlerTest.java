@@ -3,7 +3,9 @@ package teamwork.chatbottelegrem.service;
 import com.pengrad.telegrambot.BotUtils;
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.model.Update;
+import com.pengrad.telegrambot.request.GetFile;
 import com.pengrad.telegrambot.request.SendMessage;
+import com.pengrad.telegrambot.response.GetFileResponse;
 import com.pengrad.telegrambot.response.SendResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -12,6 +14,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.slf4j.Logger;
+import teamwork.chatbottelegrem.Listener.TelegramBotUpdatesListenerTest;
 
 
 import java.io.IOException;
@@ -33,6 +36,22 @@ class ReportHandlerTest {
             }
             """, SendResponse.class
     );
+
+    byte[] testPhoto = Files.readAllBytes(Path.of(TelegramBotUpdatesListenerTest.class.getResource("foto.jpeg").toURI()));
+
+
+    GetFileResponse getFileResponse = BotUtils.fromJson("""
+                {
+                    "result":
+                    {
+                        "file_id": "001",
+                        "file_unique_id": "002",
+                        "file_size": 157170,
+                        "file_path": "photo.jpeg"
+                    },
+                    "ok": true
+                }
+                """, GetFileResponse.class);
     @Mock
     TelegramBot telegramBot;
     @Mock
@@ -49,17 +68,14 @@ class ReportHandlerTest {
     }
 
     @Test
-    void checkEmptyReport() {
+    void checkEmptyTextReport() throws IOException, URISyntaxException {
         Update update = BotUtils.fromJson(json.replace("%text%", ""), Update.class);
         SendMessage sendMessage = new SendMessage(update.message().chat().id(), "Пожалуйста, направьте текстовый отчет о питомце");
-        SendResponse sendResponse = BotUtils.fromJson("""
-                {
-                "ok": true
-                }
-                """, SendResponse.class
-        );
 
-        when(telegramBot.execute(any())).thenReturn(sendResponse);
+        when(telegramBot.getFileContent(any())).thenReturn(testPhoto);
+        when(telegramBot.execute(any(SendMessage.class))).thenReturn(sendResponse);
+        when(telegramBot.execute(any(GetFile.class))).thenReturn(getFileResponse);
+
         reportHandler.checkReport(update);
         ArgumentCaptor<SendMessage> argumentCaptor = ArgumentCaptor.forClass(SendMessage.class);
         verify(telegramBot).execute(argumentCaptor.capture());
@@ -69,11 +85,15 @@ class ReportHandlerTest {
     }
 
     @Test
-    void checkReport2() {
+    void checkReport2() throws IOException {
 
         Update update = BotUtils.fromJson(json.replace("%text%", "    "), Update.class);
         SendMessage sendMessage = new SendMessage(update.message().chat().id(), "Пожалуйста, направьте текстовый отчет о питомце");
-        when(telegramBot.execute(any())).thenReturn(sendResponse);
+
+        when(telegramBot.getFileContent(any())).thenReturn(testPhoto);
+        when(telegramBot.execute(any(SendMessage.class))).thenReturn(sendResponse);
+        when(telegramBot.execute(any(GetFile.class))).thenReturn(getFileResponse);
+
         reportHandler.checkReport(update);
         ArgumentCaptor<SendMessage> argumentCaptor = ArgumentCaptor.forClass(SendMessage.class);
         verify(telegramBot).execute(argumentCaptor.capture());
@@ -86,7 +106,9 @@ class ReportHandlerTest {
         String json = Files.readString(Path.of(ReportHandlerTest.class.getResource("updateWithoutPhoto.json").toURI()));
         Update update = BotUtils.fromJson(json.replace("%text%", "С питомцем всё в порядке"), Update.class);
         SendMessage sendMessage = new SendMessage(update.message().chat().id(), "Пожалуйста, направьте фото питомца");
-        when(telegramBot.execute(any())).thenReturn(sendResponse);
+
+        when(telegramBot.execute(any(SendMessage.class))).thenReturn(sendResponse);
+
         reportHandler.checkReport(update);
         ArgumentCaptor<SendMessage> argumentCaptor = ArgumentCaptor.forClass(SendMessage.class);
         verify(telegramBot).execute(argumentCaptor.capture());

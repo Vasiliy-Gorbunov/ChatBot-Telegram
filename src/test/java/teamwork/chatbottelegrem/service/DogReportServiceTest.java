@@ -11,6 +11,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import teamwork.chatbottelegrem.Listener.TelegramBotUpdatesListenerTest;
 import teamwork.chatbottelegrem.Model.DogReport;
 import teamwork.chatbottelegrem.repository.DogReportRepository;
 
@@ -46,16 +47,28 @@ import static org.mockito.Mockito.when;
         public void dogReportSaveTest () throws URISyntaxException, IOException {
             String json = Files.readString(Path.of(CatReportServiceTest.class.getResource("update.json").toURI()));
             Update update = BotUtils.fromJson(json, Update.class);
-            GetFileResponse sendResponse = BotUtils.fromJson("""
-            {
-            "ok": true
-            }
-            """, GetFileResponse.class);
+            byte[] testPhoto = Files.readAllBytes(Path.of(TelegramBotUpdatesListenerTest.class.getResource("foto.jpeg").toURI()));
 
-            when(telegramBot.execute(any())).thenReturn(sendResponse);
+
+            GetFileResponse getFileResponse = BotUtils.fromJson("""
+                {
+                    "result":
+                    {
+                        "file_id": "001",
+                        "file_unique_id": "002",
+                        "file_size": 157170,
+                        "file_path": "photo.jpeg"
+                    },
+                    "ok": true
+                }
+                """, GetFileResponse.class);
+
+            when(telegramBot.execute(any())).thenReturn(getFileResponse);
+            when(telegramBot.getFileContent(any())).thenReturn(testPhoto);
+
             DogReport dogReport = dogReportService.dogReportFromUpdate(update);
             dogReportService.save(update);
-            verify(dogReportRepository.save((dogReport)));
+            verify(dogReportRepository).save((dogReport));
             assertEquals(dogReport.getFileId(), "15");
         }
     }
