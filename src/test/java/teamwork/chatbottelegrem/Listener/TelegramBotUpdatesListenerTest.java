@@ -50,6 +50,8 @@ public class TelegramBotUpdatesListenerTest {
     @Mock
     private ContextService contextService;
     @Mock
+    private ReportMessageService reportMessageService;
+    @Mock
     private KeyBoard keyBoard;
     @Mock
     private CatReportRepository catReportRepository;
@@ -588,16 +590,23 @@ public class TelegramBotUpdatesListenerTest {
 
     @Test
     public void sendWarning() {
+        SendResponse sendResponse = returnSendResponseIsOk();
         List<Context> contextList = new ArrayList<>();
         contextList.add(new Context(123L, new CatUsers("John", "88005553535", 123L)));
         List<ReportMessage> reportMessageList = new ArrayList<>();
-        reportMessageList.add(new ReportMessage(123L, new Date(2023-5-19)));
-        reportMessageList.add(new ReportMessage(123L, new Date(2023-5-20)));
-        reportMessageList.add(new ReportMessage(123L, new Date(2023-5-21)));
-        reportMessageList.add(new ReportMessage(123L, new Date(2023-5-22)));
+        reportMessageList.add(new ReportMessage(123L, new Date("2023/5/18")));
+        reportMessageList.add(new ReportMessage(123L, new Date("2023/5/19")));
+        reportMessageList.add(new ReportMessage(123L, new Date("2023/5/20")));
+        reportMessageList.add(new ReportMessage(123L, new Date("2023/5/21")));
 
-        when(contextRepository.findAll()).thenReturn(contextList);
-        when(reportMessageRepository.findAll()).thenReturn(reportMessageList);
+        long twoDay = 172800000;
+        Date nowTime = new Date(new Date().getTime() - twoDay);
+
+        when(contextService.getAll()).thenReturn(contextList);
+        when(reportMessageService.getAll()).thenReturn(reportMessageList);
+        when(telegramBot.execute(any())).thenReturn(sendResponse);
+
+        argumentCaptorSendMessage(contextList.get(0).getChatId(), "Прошло два дня после отправки прошлого отчёта. Пожалуйста, отправьте отчёт!");
 
     }
 
