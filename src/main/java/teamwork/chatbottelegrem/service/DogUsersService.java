@@ -36,7 +36,7 @@ public class DogUsersService {
      * обновление данных пользователя
      */
     public DogUsers update(DogUsers dogUsers) {
-        if (dogUsers.getChatId() != null && getById(dogUsers.getChatId()) != null) {
+        if (dogUsers.getId() != null && getById(dogUsers.getId()) != null) {
             return repository.save(dogUsers);
         }
         throw new DogUserNotFoundException();

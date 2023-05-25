@@ -34,7 +34,7 @@ public class CatUsersService {
      * обновление данных пользователя
      */
     public CatUsers update(CatUsers catUsers) {
-        if (catUsers.getChatId() != null && getById(catUsers.getChatId()) != null) {
+        if (catUsers.getId() != null && getById(catUsers.getId()) != null) {
             return repository.save(catUsers);
         }
         throw new CatUserNotFoundException();
