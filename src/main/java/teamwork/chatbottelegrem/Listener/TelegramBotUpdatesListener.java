@@ -317,8 +317,21 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
                         .orElse(null);
                 if (lastMessageDate != null) {
                     if (lastMessageDate.before(nowTime)) {
+
+//                        SendMessage sendMessage1 = new SendMessage(chatId, "Прошло два дня после отправки прошлого отчёта. Пожалуйста, отправьте отчёт!");
+//                        SendMessage sendMessage2 = new SendMessage(406340732L, "Пользователь под номером: " + chatId
+//                                + " не отправлял отчёты уже более двух дней!");
+//                        SendResponse sendResponse1 = telegramBot.execute(sendMessage1);
+//                        SendResponse sendResponse2 = telegramBot.execute(sendMessage2);
+//                        if (!sendResponse1.isOk()) {
+//                            logger.error("Error during sending message: {}", sendResponse1.description());
+//                        }
+//                        if (!sendResponse2.isOk()) {
+//                            logger.error("Error during sending message: {}", sendResponse1.description());
+//                        }
+
                         sendResponseMessage(chatId, "Прошло два дня после отправки прошлого отчёта. Пожалуйста, отправьте отчёт!");
-                        sendResponseMessage(volunteerChatId, "Пользователь под номером: " + chatId
+                        sendResponseMessage(406340732L, "Пользователь под номером: " + chatId
                                 + " не отправлял отчёты уже более двух дней!");
                     }
                 }

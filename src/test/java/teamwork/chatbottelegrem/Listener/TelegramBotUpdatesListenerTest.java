@@ -598,15 +598,21 @@ public class TelegramBotUpdatesListenerTest {
         reportMessageList.add(new ReportMessage(123L, new Date("2023/5/19")));
         reportMessageList.add(new ReportMessage(123L, new Date("2023/5/20")));
         reportMessageList.add(new ReportMessage(123L, new Date("2023/5/21")));
-
-        long twoDay = 172800000;
-        Date nowTime = new Date(new Date().getTime() - twoDay);
+        Long chatId = contextList.get(0).getChatId();
 
         when(contextService.getAll()).thenReturn(contextList);
         when(reportMessageService.getAll()).thenReturn(reportMessageList);
-        when(telegramBot.execute(any())).thenReturn(sendResponse);
+        when(telegramBot.execute(new SendMessage(chatId, "Прошло два дня после отправки прошлого отчёта. Пожалуйста, отправьте отчёт!"))).thenReturn(sendResponse);
+        when(telegramBot.execute(new SendMessage(volunteerChatId, "Пользователь под номером: " + chatId
+                + " не отправлял отчёты уже более двух дней!"))).thenReturn(sendResponse);
 
-        argumentCaptorSendMessage(contextList.get(0).getChatId(), "Прошло два дня после отправки прошлого отчёта. Пожалуйста, отправьте отчёт!");
+
+        telegramBotUpdatesListener.sendWarning();
+
+        argumentCaptorSendMessage(chatId, "Прошло два дня после отправки прошлого отчёта. Пожалуйста, отправьте отчёт!");
+        argumentCaptorSendMessage(volunteerChatId, "Пользователь под номером: " + chatId
+                + " не отправлял отчёты уже более двух дней!");
+
 
     }
 
