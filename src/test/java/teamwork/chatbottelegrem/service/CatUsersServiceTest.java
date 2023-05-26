@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import teamwork.chatbottelegrem.Model.CatUsers;
+import teamwork.chatbottelegrem.model.CatUsers;
 import teamwork.chatbottelegrem.exception.CatUserNotFoundException;
 import teamwork.chatbottelegrem.repository.CatUsersRepository;
 

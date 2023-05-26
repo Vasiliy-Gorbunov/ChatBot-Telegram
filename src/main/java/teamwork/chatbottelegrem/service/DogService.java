@@ -1,7 +1,7 @@
 package teamwork.chatbottelegrem.service;
 
 import org.springframework.stereotype.Service;
-import teamwork.chatbottelegrem.Model.Dog;
+import teamwork.chatbottelegrem.model.Dog;
 import teamwork.chatbottelegrem.exception.DogNotFoundException;
 import teamwork.chatbottelegrem.repository.DogRepository;
 /**

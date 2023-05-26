@@ -1,18 +1,17 @@
-package teamwork.chatbottelegrem.Model;
+package teamwork.chatbottelegrem.model;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
-
 import javax.persistence.*;
-import java.util.Objects;
+
 /**
- * Класс владельца кота
+ * Класс владельца собаки
  */
 @Data
 @Entity
-@Table(name = "catUsers")
-public class CatUsers {
+@AllArgsConstructor
+@Table(name = "dogUsers")
+public class DogUsers {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,14 +26,13 @@ public class CatUsers {
     private Long chatId;
     @JsonBackReference
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "cat_id")
-    private Cat cat;
+    @JoinColumn(name = "dog_id")
+    private Dog dog;
     //Пустой конструктор класса
-    public CatUsers() {
+    public DogUsers() {
     }
     //конструктор класса с полями name, phone, chatId.
-
-    public CatUsers(String name, String phone, Long chatId) {
+    public DogUsers(String name, String phone, Long chatId) {
         this.name = name;
         this.number = phone;
         this.chatId = chatId;

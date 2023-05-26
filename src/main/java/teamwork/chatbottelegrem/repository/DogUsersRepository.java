@@ -2,8 +2,7 @@ package teamwork.chatbottelegrem.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import teamwork.chatbottelegrem.Model.CatUsers;
-import teamwork.chatbottelegrem.Model.DogUsers;
+import teamwork.chatbottelegrem.model.DogUsers;
 
 import java.util.Set;
 

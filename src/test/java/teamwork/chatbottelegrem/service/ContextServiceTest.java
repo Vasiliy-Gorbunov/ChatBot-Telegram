@@ -5,11 +5,10 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import teamwork.chatbottelegrem.Model.Context;
+import teamwork.chatbottelegrem.model.Context;
 import teamwork.chatbottelegrem.repository.ContextRepository;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 

@@ -1,4 +1,4 @@
-package teamwork.chatbottelegrem.Listener;
+package teamwork.chatbottelegrem.listener;
 
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.UpdatesListener;
@@ -13,10 +13,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-import teamwork.chatbottelegrem.Model.CatUsers;
-import teamwork.chatbottelegrem.Model.Context;
-import teamwork.chatbottelegrem.Model.DogUsers;
-import teamwork.chatbottelegrem.Model.ReportMessage;
+import teamwork.chatbottelegrem.model.CatUsers;
+import teamwork.chatbottelegrem.model.Context;
+import teamwork.chatbottelegrem.model.DogUsers;
+import teamwork.chatbottelegrem.model.ReportMessage;
 import teamwork.chatbottelegrem.botInterface.ButtonCommand;
 import teamwork.chatbottelegrem.botInterface.KeyBoard;
 import teamwork.chatbottelegrem.repository.CatReportRepository;
@@ -44,12 +44,13 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
     private final ReportMessageService reportMessageService;
     private final DogReportRepository dogReportRepository;
     private final CatReportRepository catReportRepository;
+    private final CatReportService catReportService;
 
 
     /**
      * Класс реализации общения бота с пользователем
      */
-    public TelegramBotUpdatesListener(TelegramBot telegramBot, KeyBoard keyBoard, ContextService contextService, CatUsersService catUsersService, DogUsersService dogUsersService, ReportMessageService reportMessageService, DogReportRepository dogReportRepository, CatReportRepository catReportRepository) {
+    public TelegramBotUpdatesListener(TelegramBot telegramBot, KeyBoard keyBoard, ContextService contextService, CatUsersService catUsersService, DogUsersService dogUsersService, ReportMessageService reportMessageService, DogReportRepository dogReportRepository, CatReportRepository catReportRepository, CatReportService catReportService) {
         this.telegramBot = telegramBot;
         this.keyBoard = keyBoard;
         this.contextService = contextService;
@@ -58,6 +59,7 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
         this.reportMessageService = reportMessageService;
         this.catReportRepository = catReportRepository;
         this.dogReportRepository = dogReportRepository;
+        this.catReportService = catReportService;
     }
 
     public static ButtonCommand parse(String buttonCommand) {
@@ -223,7 +225,6 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
                         if (context.getShelterType().equals(ButtonCommand.CAT.getCommand())) {
                             CatReportService catReportService = new CatReportService(catReportRepository, telegramBot);
                             catReportService.save(update);
-
                         } else if (context.getShelterType().equals(ButtonCommand.DOG.getCommand())) {
                             DogReportService dogReportService = new DogReportService(dogReportRepository, telegramBot);
                             dogReportService.save(update);
@@ -252,21 +253,29 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
 
                     case null -> {
                         Context context = contextService.getByChatId(chatId).get();
-                        if (context.getShelterType().equals(
-                                ButtonCommand.CAT.getCommand()) && update.message() != null && contact != null) {
+                        if (context.getShelterType().equals(ButtonCommand.CAT.getCommand())){
+                            if (update.message() != null && contact != null) {
                             CatUsers catUsers = context.getCatUsers();
                             catUsers.setNumber(contact.phoneNumber());
                             catUsers.setName(contact.firstName());
                             catUsersService.update(catUsers);
+                            sendForwardMessage(chatId, messageId);
+                            sendResponseMessage(chatId, "Мы получили ваши контактные данные");
+                            } else if (update.message() != null) {
+                                if (catReportService.save(update)) {
+                                    sendForwardMessage(chatId, messageId);
+                                    sendResponseMessage(chatId, "Мы получили ваш отчёт, спасибо!");
+                                }
+                            }
                         } else if (context.getShelterType().equals(
                                 ButtonCommand.DOG.getCommand()) && update.message() != null && contact != null) {
                             DogUsers dogUsers = context.getDogUsers();
                             dogUsers.setNumber(contact.phoneNumber());
                             dogUsers.setName(contact.firstName());
                             dogUsersService.update(dogUsers);
+                            sendForwardMessage(chatId, messageId);
+                            sendResponseMessage(chatId, "Мы получили ваши контактные данные");
                         }
-                        sendForwardMessage(chatId, messageId);
-                        sendResponseMessage(chatId, "Мы получили ваши контактные данные");
 
                     }
                     default -> sendResponseMessage(chatId, "Неизвестная команда!");

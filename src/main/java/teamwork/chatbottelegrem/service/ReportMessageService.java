@@ -1,7 +1,7 @@
 package teamwork.chatbottelegrem.service;
 
 import org.springframework.stereotype.Service;
-import teamwork.chatbottelegrem.Model.ReportMessage;
+import teamwork.chatbottelegrem.model.ReportMessage;
 import teamwork.chatbottelegrem.exception.ReportMessageNotFoundException;
 import teamwork.chatbottelegrem.repository.ReportMessageRepository;
 

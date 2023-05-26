@@ -1,4 +1,4 @@
-package teamwork.chatbottelegrem.Model;
+package teamwork.chatbottelegrem.model;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;

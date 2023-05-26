@@ -1,4 +1,4 @@
-package teamwork.chatbottelegrem.Listener;
+package teamwork.chatbottelegrem.listener;
 
 import com.pengrad.telegrambot.BotUtils;
 import com.pengrad.telegrambot.TelegramBot;
@@ -17,9 +17,9 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
-import teamwork.chatbottelegrem.Model.CatUsers;
-import teamwork.chatbottelegrem.Model.Context;
-import teamwork.chatbottelegrem.Model.DogUsers;
+import teamwork.chatbottelegrem.model.CatUsers;
+import teamwork.chatbottelegrem.model.Context;
+import teamwork.chatbottelegrem.model.DogUsers;
 import teamwork.chatbottelegrem.botInterface.KeyBoard;
 import teamwork.chatbottelegrem.repository.CatReportRepository;
 import teamwork.chatbottelegrem.repository.DogReportRepository;

@@ -1,7 +1,7 @@
 package teamwork.chatbottelegrem.service;
 
 import org.springframework.stereotype.Service;
-import teamwork.chatbottelegrem.Model.Context;
+import teamwork.chatbottelegrem.model.Context;
 import teamwork.chatbottelegrem.repository.ContextRepository;
 
 import java.util.Collection;

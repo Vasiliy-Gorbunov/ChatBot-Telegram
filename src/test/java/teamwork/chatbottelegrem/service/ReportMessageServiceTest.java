@@ -1,12 +1,11 @@
 package teamwork.chatbottelegrem.service;
 
-import liquibase.pro.packaged.R;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import teamwork.chatbottelegrem.Model.ReportMessage;
+import teamwork.chatbottelegrem.model.ReportMessage;
 import teamwork.chatbottelegrem.repository.ReportMessageRepository;
 
 import java.io.IOException;

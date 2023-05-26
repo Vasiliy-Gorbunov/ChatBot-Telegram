@@ -2,7 +2,7 @@ package teamwork.chatbottelegrem.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import teamwork.chatbottelegrem.Model.Context;
+import teamwork.chatbottelegrem.model.Context;
 
 import java.util.Optional;
 /**

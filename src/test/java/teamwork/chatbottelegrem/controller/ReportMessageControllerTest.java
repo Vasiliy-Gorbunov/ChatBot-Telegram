@@ -7,8 +7,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import teamwork.chatbottelegrem.Model.ReportMessage;
-import teamwork.chatbottelegrem.service.ReportHandler;
+import teamwork.chatbottelegrem.model.ReportMessage;
 import teamwork.chatbottelegrem.service.ReportMessageService;
 
 import java.util.Calendar;

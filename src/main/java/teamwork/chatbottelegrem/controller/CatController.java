@@ -2,7 +2,7 @@ package teamwork.chatbottelegrem.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.web.bind.annotation.*;
-import teamwork.chatbottelegrem.Model.Cat;
+import teamwork.chatbottelegrem.model.Cat;
 import teamwork.chatbottelegrem.service.CatService;
 /**
  * Контролеер класса кота

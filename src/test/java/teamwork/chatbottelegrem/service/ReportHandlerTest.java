@@ -14,7 +14,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.slf4j.Logger;
-import teamwork.chatbottelegrem.Listener.TelegramBotUpdatesListenerTest;
+import teamwork.chatbottelegrem.listener.TelegramBotUpdatesListenerTest;
 
 
 import java.io.IOException;
@@ -38,6 +38,7 @@ class ReportHandlerTest {
     );
 
     byte[] testPhoto = Files.readAllBytes(Path.of(TelegramBotUpdatesListenerTest.class.getResource("foto.jpeg").toURI()));
+    String catDogUsers = "TestUsers";
 
 
     GetFileResponse getFileResponse = BotUtils.fromJson("""
@@ -76,7 +77,7 @@ class ReportHandlerTest {
         when(telegramBot.execute(any(SendMessage.class))).thenReturn(sendResponse);
         when(telegramBot.execute(any(GetFile.class))).thenReturn(getFileResponse);
 
-        reportHandler.checkReport(update);
+        reportHandler.checkReport(update, catDogUsers);
         ArgumentCaptor<SendMessage> argumentCaptor = ArgumentCaptor.forClass(SendMessage.class);
         verify(telegramBot).execute(argumentCaptor.capture());
         SendMessage actual = argumentCaptor.getValue();
@@ -94,7 +95,7 @@ class ReportHandlerTest {
         when(telegramBot.execute(any(SendMessage.class))).thenReturn(sendResponse);
         when(telegramBot.execute(any(GetFile.class))).thenReturn(getFileResponse);
 
-        reportHandler.checkReport(update);
+        reportHandler.checkReport(update, catDogUsers);
         ArgumentCaptor<SendMessage> argumentCaptor = ArgumentCaptor.forClass(SendMessage.class);
         verify(telegramBot).execute(argumentCaptor.capture());
         SendMessage actual2 = argumentCaptor.getValue();
@@ -109,7 +110,7 @@ class ReportHandlerTest {
 
         when(telegramBot.execute(any(SendMessage.class))).thenReturn(sendResponse);
 
-        reportHandler.checkReport(update);
+        reportHandler.checkReport(update, catDogUsers);
         ArgumentCaptor<SendMessage> argumentCaptor = ArgumentCaptor.forClass(SendMessage.class);
         verify(telegramBot).execute(argumentCaptor.capture());
         SendMessage actual2 = argumentCaptor.getValue();

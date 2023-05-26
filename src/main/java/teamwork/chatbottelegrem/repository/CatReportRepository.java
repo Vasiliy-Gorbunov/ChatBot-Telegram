@@ -1,7 +1,7 @@
 package teamwork.chatbottelegrem.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import teamwork.chatbottelegrem.Model.CatReport;
+import teamwork.chatbottelegrem.model.CatReport;
 
 import java.time.LocalDate;
 

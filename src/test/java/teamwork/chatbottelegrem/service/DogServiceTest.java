@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import teamwork.chatbottelegrem.Model.Dog;
+import teamwork.chatbottelegrem.model.Dog;
 import teamwork.chatbottelegrem.exception.DogNotFoundException;
 import teamwork.chatbottelegrem.repository.DogRepository;
 

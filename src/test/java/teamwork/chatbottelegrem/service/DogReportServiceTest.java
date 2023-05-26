@@ -5,14 +5,13 @@ import com.pengrad.telegrambot.BotUtils;
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.response.GetFileResponse;
-import com.pengrad.telegrambot.response.SendResponse;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import teamwork.chatbottelegrem.Listener.TelegramBotUpdatesListenerTest;
-import teamwork.chatbottelegrem.Model.DogReport;
+import teamwork.chatbottelegrem.listener.TelegramBotUpdatesListenerTest;
+import teamwork.chatbottelegrem.model.DogReport;
 import teamwork.chatbottelegrem.repository.DogReportRepository;
 
 import java.io.IOException;

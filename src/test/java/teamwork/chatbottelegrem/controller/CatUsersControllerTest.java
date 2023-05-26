@@ -5,8 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import teamwork.chatbottelegrem.Model.CatUsers;
-import teamwork.chatbottelegrem.service.CatService;
+import teamwork.chatbottelegrem.model.CatUsers;
 import teamwork.chatbottelegrem.service.CatUsersService;
 
 import java.util.ArrayList;

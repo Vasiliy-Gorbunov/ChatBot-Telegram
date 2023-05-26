@@ -5,8 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import teamwork.chatbottelegrem.Model.Dog;
-import teamwork.chatbottelegrem.service.CatService;
+import teamwork.chatbottelegrem.model.Dog;
 import teamwork.chatbottelegrem.service.DogService;
 
 import static org.junit.jupiter.api.Assertions.*;

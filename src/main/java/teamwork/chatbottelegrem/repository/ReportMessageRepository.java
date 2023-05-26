@@ -1,7 +1,7 @@
 package teamwork.chatbottelegrem.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import teamwork.chatbottelegrem.Model.ReportMessage;
+import teamwork.chatbottelegrem.model.ReportMessage;
 
 import java.util.Set;
 /**

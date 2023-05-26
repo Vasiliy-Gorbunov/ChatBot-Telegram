@@ -19,9 +19,11 @@ import teamwork.chatbottelegrem.exception.ReportDataNotFoundException;
 
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.UUID;
 
 
@@ -39,7 +41,7 @@ public class ReportHandler {
      */
 
 
-    public void checkReport(Update update) {
+    public boolean checkReport(Update update, String catDogUser) {
         try {
             Message message = update.message();
             Long id = update.message().chat().id();
@@ -75,14 +77,19 @@ public class ReportHandler {
                         String extension = StringUtils.getFilenameExtension(
                                 getFileResponse.file().filePath());
                         byte[] image = telegramBot.getFileContent(getFileResponse.file());
-                        Files.write(Paths.get(update.message().chat().id()+" "+ LocalDate.now() + "." + extension), image);
+                        Path path = Path.of("src/main/resources/reports/" + catDogUser + "/" + update.message().chat().id());
+                        Files.createDirectories(path);
+                        Files.write(Paths.get(path + "/" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm")) + "." + extension), image);
+                        return true;
                     } catch (IOException e) {
                         throw new RuntimeException(e);
-
                     }
+                } else {
+                    return false;
                 }
             }
         }
+        return false;
     }
 }
 
