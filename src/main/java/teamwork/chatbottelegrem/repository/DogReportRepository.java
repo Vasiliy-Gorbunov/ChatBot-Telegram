@@ -3,9 +3,10 @@ package teamwork.chatbottelegrem.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import teamwork.chatbottelegrem.model.DogReport;
 
-import java.time.LocalDate;
+import java.util.List;
 
 
 public interface DogReportRepository extends JpaRepository<DogReport, Long> {
-    DogReport  findByDate (LocalDate date);
+
+    List<DogReport> findAllByChatId(Long chatId);
 }

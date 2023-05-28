@@ -7,7 +7,7 @@ import com.pengrad.telegrambot.model.Message;
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.ForwardMessage;
 import com.pengrad.telegrambot.request.SendMessage;
-import com.pengrad.telegrambot.response.SendResponse;;
+import com.pengrad.telegrambot.response.SendResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,8 +19,6 @@ import teamwork.chatbottelegrem.model.DogUsers;
 import teamwork.chatbottelegrem.model.ReportMessage;
 import teamwork.chatbottelegrem.botInterface.ButtonCommand;
 import teamwork.chatbottelegrem.botInterface.KeyBoard;
-import teamwork.chatbottelegrem.repository.CatReportRepository;
-import teamwork.chatbottelegrem.repository.DogReportRepository;
 import teamwork.chatbottelegrem.service.*;
 import teamwork.chatbottelegrem.service.ReportMessageService;
 
@@ -42,24 +40,22 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
     private final DogUsersService dogUsersService;
     private final ContextService contextService;
     private final ReportMessageService reportMessageService;
-    private final DogReportRepository dogReportRepository;
-    private final CatReportRepository catReportRepository;
     private final CatReportService catReportService;
+    private final DogReportService dogReportService;
 
 
     /**
      * Класс реализации общения бота с пользователем
      */
-    public TelegramBotUpdatesListener(TelegramBot telegramBot, KeyBoard keyBoard, ContextService contextService, CatUsersService catUsersService, DogUsersService dogUsersService, ReportMessageService reportMessageService, DogReportRepository dogReportRepository, CatReportRepository catReportRepository, CatReportService catReportService) {
+    public TelegramBotUpdatesListener(TelegramBot telegramBot, KeyBoard keyBoard, ContextService contextService, CatUsersService catUsersService, DogUsersService dogUsersService, ReportMessageService reportMessageService, CatReportService catReportService, DogReportService dogReportService) {
         this.telegramBot = telegramBot;
         this.keyBoard = keyBoard;
         this.contextService = contextService;
         this.catUsersService = catUsersService;
         this.dogUsersService = dogUsersService;
         this.reportMessageService = reportMessageService;
-        this.catReportRepository = catReportRepository;
-        this.dogReportRepository = dogReportRepository;
         this.catReportService = catReportService;
+        this.dogReportService = dogReportService;
     }
 
     public static ButtonCommand parse(String buttonCommand) {
@@ -129,12 +125,8 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
                         sendResponseMessage(chatId, "Вы выбрали собачий приют.");
                         keyBoard.shelterMainMenu(chatId);
                     }
-                    case MAIN_MENU -> {
-                        keyBoard.shelterMainMenu(chatId);
-                    }
-                    case SHELTER_INFO_MENU -> {
-                        keyBoard.shelterInfoMenu(chatId);
-                    }
+                    case MAIN_MENU -> keyBoard.shelterMainMenu(chatId);
+                    case SHELTER_INFO_MENU -> keyBoard.shelterInfoMenu(chatId);
                     case SHELTER_INFO -> {
                         Context context = contextService.getByChatId(chatId).get();
                         if (context.getShelterType().equals(ButtonCommand.CAT.getCommand())) {
@@ -169,9 +161,7 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
                         sendResponseMessage(chatId, "Мы передали ваше сообщение волонтеру.");
                         sendForwardMessage(chatId, messageId);
                     }
-                    case HOW_ADOPT_PET_INFO -> {
-                        keyBoard.shelterInfoHowAdoptPetMenu(chatId);
-                    }
+                    case HOW_ADOPT_PET_INFO -> keyBoard.shelterInfoHowAdoptPetMenu(chatId);
                     case RECOMMENDATIONS_LIST -> {
                         Context context = contextService.getByChatId(chatId).get();
                         if (context.getShelterType().equals(ButtonCommand.CAT.getCommand())) {
@@ -223,60 +213,54 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
                     case SEND_PET_REPORT -> {
                         Context context = contextService.getByChatId(chatId).get();
                         if (context.getShelterType().equals(ButtonCommand.CAT.getCommand())) {
-                            CatReportService catReportService = new CatReportService(catReportRepository, telegramBot);
-                            catReportService.save(update);
+                            sendResponseMessage(chatId, "Отправьте фото с описанием состояния питомца. " +
+                                    "Для получения формы отправки нажмите на кнопку \"Получить форму отчета о питомце\".");
                         } else if (context.getShelterType().equals(ButtonCommand.DOG.getCommand())) {
-                            DogReportService dogReportService = new DogReportService(dogReportRepository, telegramBot);
-                            dogReportService.save(update);
+                            sendResponseMessage(chatId, "Отправьте фото с описанием состояния питомца. " +
+                                    "Для получения формы отправки нажмите на кнопку \"Получить форму отчета о питомце\".");
                         }
                     }
 
-                    case BAD_REPORT_NOTIFICATION -> {
-                        sendResponseMessage(chatId, "Дорогой усыновитель, мы заметили, что ты заполняешь отчет не так подробно, как необходимо. Пожалуйста, подойди ответственнее к этому занятию. В противном случае волонтеры приюта будут обязаны самолично проверять условия содержания животного");
-                    }
+                    case BAD_REPORT_NOTIFICATION -> sendResponseMessage(chatId, "Дорогой усыновитель, мы заметили, что ты заполняешь отчет не так подробно, как необходимо. Пожалуйста, подойди ответственнее к этому занятию. В противном случае волонтеры приюта будут обязаны самолично проверять условия содержания животного");
 
-                    case SUCCESS_CONGRATULATION -> {
-                        sendResponseMessage(chatId, "Поздравляем! Вы успешно прошли испытательный срок.");
-                    }
+                    case SUCCESS_CONGRATULATION -> sendResponseMessage(chatId, "Поздравляем! Вы успешно прошли испытательный срок.");
 
-                    case ADDITIONAL_PERIOD_14 -> {
-                        sendResponseMessage(chatId, "Вам дополнительно назначено 14 календарных дней испытательного срока");
-                    }
+                    case ADDITIONAL_PERIOD_14 -> sendResponseMessage(chatId, "Вам дополнительно назначено 14 календарных дней испытательного срока");
 
-                    case ADDITIONAL_PERIOD_30 -> {
-                        sendResponseMessage(chatId, "Вам дополнительно назначено 30 календарных дней испытательного срока");
-                    }
+                    case ADDITIONAL_PERIOD_30 -> sendResponseMessage(chatId, "Вам дополнительно назначено 30 календарных дней испытательного срока");
 
-                    case ADOPTION_REFUSE -> {
-                        sendResponseMessage(chatId, "К сожалению, Вы не прошли испытательный срок. Пожалуйста, верните животное в приют в течение двух календарных дней.");
-                    }
+                    case ADOPTION_REFUSE -> sendResponseMessage(chatId, "К сожалению, Вы не прошли испытательный срок. Пожалуйста, верните животное в приют в течение двух календарных дней.");
 
                     case null -> {
                         Context context = contextService.getByChatId(chatId).get();
-                        if (context.getShelterType().equals(ButtonCommand.CAT.getCommand())){
+                        if (context.getShelterType().equals(ButtonCommand.CAT.getCommand())) {
                             if (update.message() != null && contact != null) {
-                            CatUsers catUsers = context.getCatUsers();
-                            catUsers.setNumber(contact.phoneNumber());
-                            catUsers.setName(contact.firstName());
-                            catUsersService.update(catUsers);
-                            sendForwardMessage(chatId, messageId);
-                            sendResponseMessage(chatId, "Мы получили ваши контактные данные");
+                                CatUsers catUsers = context.getCatUsers();
+                                catUsers.setNumber(contact.phoneNumber());
+                                catUsers.setName(contact.firstName());
+                                catUsersService.update(catUsers);
+                                sendForwardMessage(chatId, messageId);
+                                sendResponseMessage(chatId, "Мы получили ваши контактные данные");
                             } else if (update.message() != null) {
                                 if (catReportService.save(update)) {
                                     sendForwardMessage(chatId, messageId);
-                                    sendResponseMessage(chatId, "Мы получили ваш отчёт, спасибо!");
                                 }
                             }
                         } else if (context.getShelterType().equals(
-                                ButtonCommand.DOG.getCommand()) && update.message() != null && contact != null) {
-                            DogUsers dogUsers = context.getDogUsers();
-                            dogUsers.setNumber(contact.phoneNumber());
-                            dogUsers.setName(contact.firstName());
-                            dogUsersService.update(dogUsers);
-                            sendForwardMessage(chatId, messageId);
-                            sendResponseMessage(chatId, "Мы получили ваши контактные данные");
+                                ButtonCommand.DOG.getCommand())) {
+                            if (update.message() != null && contact != null) {
+                                DogUsers dogUsers = context.getDogUsers();
+                                dogUsers.setNumber(contact.phoneNumber());
+                                dogUsers.setName(contact.firstName());
+                                dogUsersService.update(dogUsers);
+                                sendForwardMessage(chatId, messageId);
+                                sendResponseMessage(chatId, "Мы получили ваши контактные данные");
+                            } else if (update.message() != null) {
+                                if (dogReportService.save(update)) {
+                                    sendForwardMessage(chatId, messageId);
+                                }
+                            }
                         }
-
                     }
                     default -> sendResponseMessage(chatId, "Неизвестная команда!");
                 }

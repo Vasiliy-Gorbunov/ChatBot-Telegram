@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import teamwork.chatbottelegrem.model.CatReport;
 
 import teamwork.chatbottelegrem.repository.CatReportRepository;
+import teamwork.chatbottelegrem.repository.DogReportRepository;
 
 import java.time.LocalDate;
 
@@ -16,12 +17,14 @@ import java.time.LocalDate;
 public class CatReportService {
 
     private final CatReportRepository catReportRepository;
+    private final DogReportRepository dogReportRepository;
 
     private final TelegramBot telegramBot;
 
 
-    public CatReportService(CatReportRepository catReportRepository, TelegramBot telegramBot) {
+    public CatReportService(CatReportRepository catReportRepository, DogReportRepository dogReportRepository, TelegramBot telegramBot) {
         this.catReportRepository = catReportRepository;
+        this.dogReportRepository = dogReportRepository;
         this.telegramBot = telegramBot;
     }
 
@@ -31,14 +34,9 @@ public class CatReportService {
      */
 
     public boolean save(Update update) {
-        ReportHandler reportHandler = new ReportHandler(telegramBot);
+        ReportHandler reportHandler = new ReportHandler(telegramBot, catReportRepository, dogReportRepository);
         String catUsers = "catUsers";
-        if (reportHandler.checkReport(update, catUsers)) {
-            catReportRepository.save(catReportFromUpdate(update));
-            return true;
-        } else {
-            return false;
-        }
+        return reportHandler.checkReport(update, catUsers);
     }
 
 
