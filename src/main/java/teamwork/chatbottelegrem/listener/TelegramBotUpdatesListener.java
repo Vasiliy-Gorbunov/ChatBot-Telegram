@@ -20,9 +20,7 @@ import teamwork.chatbottelegrem.service.*;
 import teamwork.chatbottelegrem.service.ReportMessageService;
 
 import javax.annotation.PostConstruct;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 
 @Component
@@ -335,9 +333,10 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
                             Context context = contextService.getByChatId(chatId).get();
                             if (context.getShelterType().equals(ButtonCommand.CAT.getCommand())) {
                                 if (update.message() != null && contact != null) {
-                                    CatUsers catUsers = context.getCatUsers();
+                                    String lastName = Optional.ofNullable(contact.lastName()).orElse("");
+                                    CatUsers catUsers = catUsersService.getByChatId(chatId).iterator().next();
                                     catUsers.setNumber(contact.phoneNumber());
-                                    catUsers.setName(contact.firstName());
+                                    catUsers.setName(contact.firstName()+" "+lastName);
                                     catUsersService.update(catUsers);
                                     sendForwardMessage(chatId, messageId);
                                     sendResponseMessage(chatId, "Мы получили ваши контактные данные");
@@ -349,9 +348,10 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
                             } else if (context.getShelterType().equals(
                                     ButtonCommand.DOG.getCommand())) {
                                 if (update.message() != null && contact != null) {
-                                    DogUsers dogUsers = context.getDogUsers();
+                                    String lastName = Optional.ofNullable(contact.lastName()).orElse("");
+                                    DogUsers dogUsers = dogUsersService.getByChatId(chatId).iterator().next();
                                     dogUsers.setNumber(contact.phoneNumber());
-                                    dogUsers.setName(contact.firstName());
+                                    dogUsers.setName(contact.firstName()+" "+lastName);
                                     dogUsersService.update(dogUsers);
                                     sendForwardMessage(chatId, messageId);
                                     sendResponseMessage(chatId, "Мы получили ваши контактные данные");
