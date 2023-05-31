@@ -11,7 +11,7 @@ import teamwork.chatbottelegrem.service.ReportMessageService;
 
 import java.util.Collection;
 /**
- * Контролеер класса отправки уведомлений
+ * Контроллер класса отправки уведомлений
  */
 @RestController
 @RequestMapping("animalReports")
