@@ -79,4 +79,13 @@ public class KeyBoard {
             logger.error("Error during sending message: {}", sendResponse.description());
         }
     }
+    public void volunteerMenu(long chatId) {
+        ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup(ButtonCommand.BAD_REPORT_NOTIFICATION.getCommand(),
+                ButtonCommand.SUCCESS_CONGRATULATION.getCommand());
+        replyKeyboardMarkup.addRow(new KeyboardButton(ButtonCommand.ADDITIONAL_PERIOD_14.getCommand()),
+                new KeyboardButton(ButtonCommand.ADDITIONAL_PERIOD_30.getCommand()));
+        replyKeyboardMarkup.addRow(new KeyboardButton(ButtonCommand.ADOPTION_REFUSE.getCommand()),
+                new KeyboardButton(ButtonCommand.MAIN_MENU.getCommand()));
+        sendResponseMenu(chatId, replyKeyboardMarkup, "Уважаемый волонтер, выберите нужный Вам пункт меню");
+    }
 }
