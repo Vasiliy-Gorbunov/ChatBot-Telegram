@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import org.springframework.util.StringUtils;
+import teamwork.chatbottelegrem.botInterface.KeyBoard;
 import teamwork.chatbottelegrem.exception.ReportDataNotFoundException;
 import teamwork.chatbottelegrem.model.CatReport;
 import teamwork.chatbottelegrem.model.DogReport;
@@ -38,10 +39,12 @@ public class ReportHandler {
     private final CatReportRepository catReportRepository;
     private final DogReportRepository dogReportRepository;
 
+
     public ReportHandler(TelegramBot telegramBot, CatReportRepository catReportRepository, DogReportRepository dogReportRepository) {
         this.telegramBot = telegramBot;
         this.catReportRepository = catReportRepository;
         this.dogReportRepository = dogReportRepository;
+
     }
 
     /**
@@ -98,6 +101,8 @@ public class ReportHandler {
                         catReportRepository.save(newReport);
                     }
                     sendMessage(chatId, "Мы получили ваш отчёт, спасибо!");
+                    KeyBoard keyBoard = new KeyBoard(telegramBot);
+                    keyBoard.shelterMainMenu(chatId);
                 } else if (catDogUser.equals("dogUsers")){
                     DogReport lastReport = lastDogReport(chatId);
                     if (LocalDate.now().equals(lastReport.getDate()) && lastReport.getTextReport() == null) {
@@ -114,6 +119,8 @@ public class ReportHandler {
                         dogReportRepository.save(newReport);
                     }
                     sendMessage(chatId, "Мы получили ваш отчёт, спасибо!");
+                    KeyBoard keyBoard = new KeyBoard(telegramBot);
+                    keyBoard.shelterMainMenu(chatId);
                 }
             }
 
@@ -167,6 +174,8 @@ public class ReportHandler {
                             }
                         }
                         sendMessage(chatId, "Мы получили ваше фото, спасибо!");
+                        KeyBoard keyBoard = new KeyBoard(telegramBot);
+                        keyBoard.shelterMainMenu(chatId);
                             return true;
 
                     } catch (IOException e) {
