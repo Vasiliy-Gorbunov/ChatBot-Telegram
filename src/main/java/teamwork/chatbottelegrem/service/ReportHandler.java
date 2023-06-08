@@ -84,7 +84,10 @@ public class ReportHandler {
                         sendMessage(chatId,"Пожалуйста, направьте текстовый отчет о питомце");
                     }
                 }
-            } else if (text != null) {
+            } else if (text != null || caption != null) {
+                if (caption != null) {
+                    text = caption;
+                }
                 if (catDogUser.equals("catUsers")) {
                     CatReport lastReport = lastCatReport(chatId);
                     if (LocalDate.now().equals(lastReport.getDate()) && lastReport.getTextReport() == null) {
