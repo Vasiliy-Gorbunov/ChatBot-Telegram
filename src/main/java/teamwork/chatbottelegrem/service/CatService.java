@@ -1,7 +1,7 @@
 package teamwork.chatbottelegrem.service;
 
 import org.springframework.stereotype.Service;
-import teamwork.chatbottelegrem.Model.Cat;
+import teamwork.chatbottelegrem.model.Cat;
 import teamwork.chatbottelegrem.exception.CatNotFoundException;
 import teamwork.chatbottelegrem.repository.CatRepository;
 /**

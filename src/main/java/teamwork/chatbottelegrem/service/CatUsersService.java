@@ -5,7 +5,7 @@ package teamwork.chatbottelegrem.service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-import teamwork.chatbottelegrem.Model.CatUsers;
+import teamwork.chatbottelegrem.model.CatUsers;
 import teamwork.chatbottelegrem.exception.CatUserNotFoundException;
 import teamwork.chatbottelegrem.repository.CatUsersRepository;
 

@@ -3,9 +3,7 @@ package teamwork.chatbottelegrem.service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-import teamwork.chatbottelegrem.Model.CatUsers;
-import teamwork.chatbottelegrem.Model.DogUsers;
-import teamwork.chatbottelegrem.exception.CatUserNotFoundException;
+import teamwork.chatbottelegrem.model.DogUsers;
 import teamwork.chatbottelegrem.exception.DogUserNotFoundException;
 import teamwork.chatbottelegrem.repository.CatUsersRepository;
 import teamwork.chatbottelegrem.repository.DogUsersRepository;
@@ -39,7 +37,7 @@ public class  DogUsersService {
         if (dogUsers.getId() != null && getById(dogUsers.getId()) != null) {
             return repository.save(dogUsers);
         }
-        throw new CatUserNotFoundException();
+        throw new DogUserNotFoundException();
     }
     /**
      * Удаление данных о пользователе

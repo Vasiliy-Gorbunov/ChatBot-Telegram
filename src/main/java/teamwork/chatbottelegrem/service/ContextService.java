@@ -1,7 +1,7 @@
 package teamwork.chatbottelegrem.service;
 
 import org.springframework.stereotype.Service;
-import teamwork.chatbottelegrem.Model.Context;
+import teamwork.chatbottelegrem.model.Context;
 import teamwork.chatbottelegrem.repository.ContextRepository;
 
 import java.util.Collection;
@@ -16,8 +16,8 @@ public class ContextService {
     public ContextService(ContextRepository contextRepository) {
         this.contextRepository = contextRepository;
     }
-    public Context saveContext(Context context) {
-        return contextRepository.save(context);
+    public void saveContext(Context context) {
+        contextRepository.save(context);
     }
     public Collection<Context> getAll() {
         return contextRepository.findAll();

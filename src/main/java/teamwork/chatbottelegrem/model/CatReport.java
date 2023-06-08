@@ -1,4 +1,4 @@
-package teamwork.chatbottelegrem.Model;
+package teamwork.chatbottelegrem.model;
 
 import lombok.*;
 
@@ -9,19 +9,18 @@ import java.time.LocalDate;
 @RequiredArgsConstructor
 @NoArgsConstructor
 @Data
-@Table(name="dog_report")
-public class DogReport  {
+@Table(name="cat_report")
+public class CatReport  {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @NonNull
     private long id;
+
     @Column (name = "chat_id", nullable = false)
     @NonNull
     private long chatId;
-
     @Column (name = "text_report")
     private String textReport;
-
     @Column (name = "file_id")
     private String fileId;
 

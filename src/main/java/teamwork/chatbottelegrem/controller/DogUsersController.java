@@ -1,11 +1,8 @@
 package teamwork.chatbottelegrem.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import teamwork.chatbottelegrem.Model.CatUsers;
-import teamwork.chatbottelegrem.Model.DogUsers;
-import teamwork.chatbottelegrem.service.CatUsersService;
+import teamwork.chatbottelegrem.model.DogUsers;
 import teamwork.chatbottelegrem.service.DogUsersService;
 
 import java.util.Collection;

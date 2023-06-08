@@ -16,6 +16,8 @@ public enum ButtonCommand {
     SEND_CONTACT("Отправить контактные данные"),
     GET_REPORT_FORM("Получить форму отчета о питомце"),
     SEND_PET_REPORT("Прислать отчет о питомце"),
+    VOLUNTEER_MENU("/volunteer"),
+    MAIN_MENU2("/menu"),
     BAD_REPORT_NOTIFICATION ("/bad_report_notification"),
     SUCCESS_CONGRATULATION("/success_congratulations"),
     ADDITIONAL_PERIOD_14("/additional_period_14"),

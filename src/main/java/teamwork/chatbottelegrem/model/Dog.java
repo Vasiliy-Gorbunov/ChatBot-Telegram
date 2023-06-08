@@ -1,37 +1,41 @@
-package teamwork.chatbottelegrem.Model;
+package teamwork.chatbottelegrem.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Table;
+
 /**
- * Класс кота
+ * Класс собаки
  */
 @Data
+@Entity
+@Table(name = "dog")
 @NoArgsConstructor
 @AllArgsConstructor
-public class Cat {
+public class Dog {
 
     @Id
     @GeneratedValue
     private Long id;
     //id
     private String name;
-    //Имя
+    //Имя собаки
     private String breed;
-    //Порода кота
+    //Порода
     private int yearOfBirth;
     //Год рождения
     private String info;
-    // Доп.информация
-
-
+    //Доп.информация
 
     @Override
     public String toString() {
-        return "Кличка: " + getName() + "Год рождения: " + getYearOfBirth() +
-                "Порода: " + getBreed() + "Доп.информация:  " + getInfo();
+        return "Кличка: " + getName() + " Год рождения: " + getYearOfBirth() +
+                " Порода: " + getBreed()+ "Доп.информация: "+ getInfo();
     }
+
 }

@@ -1,4 +1,4 @@
 databaseChangeLog:
   - include:
-    file: db/tables/init.sql
+      file: db/tables/init.sql
 
