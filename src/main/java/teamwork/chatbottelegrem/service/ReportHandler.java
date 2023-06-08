@@ -104,8 +104,7 @@ public class ReportHandler {
                         catReportRepository.save(newReport);
                     }
                     sendMessage(chatId, "Мы получили ваш отчёт, спасибо!");
-                    KeyBoard keyBoard = new KeyBoard(telegramBot);
-                    keyBoard.shelterMainMenu(chatId);
+
                 } else if (catDogUser.equals("dogUsers")){
                     DogReport lastReport = lastDogReport(chatId);
                     if (LocalDate.now().equals(lastReport.getDate()) && lastReport.getTextReport() == null) {
@@ -122,8 +121,7 @@ public class ReportHandler {
                         dogReportRepository.save(newReport);
                     }
                     sendMessage(chatId, "Мы получили ваш отчёт, спасибо!");
-                    KeyBoard keyBoard = new KeyBoard(telegramBot);
-                    keyBoard.shelterMainMenu(chatId);
+
                 }
             }
 
@@ -149,8 +147,8 @@ public class ReportHandler {
                         byte[] image = telegramBot.getFileContent(getFileResponse.file());
                         Path path = Path.of("src/main/resources/reports/" + catDogUser + "/" + chatId);
                         Files.createDirectories(path);
-                        Files.write(Paths.get(path + "/" + LocalDateTime.now().format
-                                (DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm")) + "." + extension), image);
+                        Files.write(Paths.get(path + "/" + LocalDate.now() + "."+ extension), image);
+//                                (DateTimeFormatter.ofPattern("dd-MM-yyyy")) + "." + extension), image);
                         if (catDogUser.equals("catUsers")) {
                             CatReport lastReport = lastCatReport(chatId);
                             if (LocalDate.now().equals(lastReport.getDate())) {
